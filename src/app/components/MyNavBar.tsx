@@ -1,3 +1,4 @@
+'use client'
 import {
   Navbar, 
   NavbarBrand, 
@@ -14,7 +15,22 @@ import toast, { Toaster } from "react-hot-toast";
 import { useEffect, useState } from "react";
 import { ThemeSwitcher } from "./ThemeSwitcher";
 
+
+
 export default function MyNavbar() {
+  const router = useRouter()
+
+  const handleButtonClick = async () => {
+    try {
+      const response = await axios.get('/api/users/signout')
+      toast.success(response.data.message)
+      router.push('/')
+    }
+    catch (error: any) {
+      const errorResponse = `Signout Failed: ${error.response.data.error}`
+      toast.error( errorResponse)
+    }
+  }
 
   return (
     <div className="flex flex-col items-center justify-center">
@@ -26,6 +42,13 @@ export default function MyNavbar() {
         </NavbarContent>
 
         <NavbarContent className="m-auto">
+          <Button
+            color='danger'
+            variant="shadow"
+            onClick={handleButtonClick}
+          >
+            Signout
+          </Button>
           <ThemeSwitcher />
         </NavbarContent>
       </Navbar>

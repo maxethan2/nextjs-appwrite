@@ -73,7 +73,7 @@ export default function LoginPage() {
             >Login</Button>
           </div> 
         {/* </form> */}
-        <Link href='/signup' className="m-auto hover:text-blue-300 hover:underline">Don't have an account? Signup Now!</Link>
+        <Link href='/signup' className="m-auto hover:text-blue-300 hover:underline">Don&apos;t have an account? Signup Now!</Link>
       </div>
     </div>
   );

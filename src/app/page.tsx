@@ -1,13 +1,12 @@
-import { getLoggedInUser } from "@/lib/server/appwrite";
-import { redirect } from "next/navigation";
+
 
 export default async function Home() {
-  const user = await getLoggedInUser()
 
-  if (!user) {
-    redirect('/signup')
-  }
-  else {
-    redirect('/account')
-  }
+  return (
+    <div className="min-h-screen bg-default-50 flex items-center justify-center">
+      <p className="m-auto">
+        HomePage LOL
+      </p>
+    </div>
+  )
 }

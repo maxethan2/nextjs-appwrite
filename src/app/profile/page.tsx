@@ -1,38 +1,37 @@
-import { createSessionClient, getLoggedInUser } from "@/lib/server/appwrite";
-import { redirect } from "next/navigation";
-import { cookies } from "next/headers";
+'use client'
+import { useEffect, useState } from "react";
+import axios from "axios";
 
-async function signOut() {
-  "use server"
+export default function HomePage() {
+  const [user, setUser] = useState<User | null>(null)
 
-  const { account } = await createSessionClient()
-  cookies().delete('my-custom-session')
-  await account.deleteSession("current");
+  useEffect(() => {
+    const getLoggedInUser = async () => {
+      try {
+        const response = await axios.get('/api/users/loggedInUser')
+        setUser(response.data.user)
+      }
+      catch (error: any) {
+        console.log(error.message)
+      }
+    }
 
-  redirect('/signup')
-}
-
-export default async function HomePage() {
-  const user = await getLoggedInUser()
-  if (!user) {redirect('/signup')}
+    getLoggedInUser()
+  }, [])
 
   return (
-    <>
+    <div className="min-h-screen flex justify-center items-center bg-default-50">
       <ul>
         <li>
-          <strong>Email:</strong> {user.email}
+          {`Name: ${user && user.name}`}
         </li>
         <li>
-          <strong>Name:</strong> {user.name}
+          {`Email: ${user && user.email}`}
         </li>
         <li>
-          <strong>ID: </strong> {user.$id}
+          {`UserId: ${user && user.$id}`}
         </li>
       </ul>
-
-      <form action={signOut}>
-        <button type="submit">Sign out</button>
-      </form>
-    </>
+    </div>
   );
 }
