@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import { useRouter } from "next/navigation";
 
 export function middleware(request: NextRequest) {
   const path = request.nextUrl.pathname
@@ -9,13 +10,17 @@ export function middleware(request: NextRequest) {
   const token = request.cookies.get('my-custom-session')?.value || ''
 
   // trying to access public path and you have a login token
-  if (isPublicPath && token != '') {
-    return NextResponse.redirect(new URL('/', request.nextUrl))
-  }
-  // trying to access a private path ie: profile with no login token
-  if (!isPublicPath && token == '') {
-    return NextResponse.redirect(new URL("/signup", request.nextUrl))
-  }
+  // if (isPublicPath && token != '') {
+  //   return NextResponse.redirect(new URL('/', request.nextUrl))
+  // }
+  // // trying to access a private path ie: profile with no login token
+  // if (!isPublicPath && token == '') {
+  //   return NextResponse.redirect(new URL("/signup", request.nextUrl))
+  // }
+
+  // if (path === '/profile' && token === '') {
+  //   return NextResponse.redirect(new URL('/', request.nextUrl))
+  // }
 }
 
 export const config = {
@@ -23,5 +28,6 @@ export const config = {
     // '/',
     '/login',
     '/signup',
+    '/profile'
   ]
 }
