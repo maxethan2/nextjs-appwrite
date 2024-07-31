@@ -3,6 +3,7 @@ import { Suspense, useEffect, useState } from "react";
 import axios from "axios";
 import { CircularProgress } from "@nextui-org/react";
 import { useRouter } from "next/router";
+import Link from "next/link";
 
 export default function HomePage() {
   const [user, setUser] = useState<User | null>(null)
@@ -52,7 +53,7 @@ export default function HomePage() {
         }
       </div>
       <div className="flex bg-default-200 p-6">
-        <h1>ToDo List</h1>
+        <Link href='/profile/todo'>Todo List</Link>
       </div>
     </div>
   );

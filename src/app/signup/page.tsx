@@ -13,7 +13,6 @@ export default function SignUpPage() {
     email: '',
     password: '',
     username: ''
-    
   })
 
   const [buttonDisabled, setButtonDisabled] = useState(true)
