@@ -1,5 +1,5 @@
 "use client"
-import { Textarea, Checkbox, Tooltip } from "@nextui-org/react"
+import { Textarea, Checkbox, Tooltip, Divider } from "@nextui-org/react"
 import { useState, useEffect } from "react"
 
 type Props = {
@@ -11,29 +11,34 @@ export default function ToDo({ todo }: Props) {
   const [isCompleted, setIsCompleted] = useState(todo.completed)
 
   return (
-    <div className="flex flex-row bg-default-300 p-2 rounded-lg">
-      <Checkbox 
-        isDisabled={disabled} 
-        color='danger' 
-        radius="md"
-        isSelected={isCompleted}
-        onValueChange={setIsCompleted}
-      />
+    <div className="flex flex-col">
+      <div className="flex flex-row p-2 rounded-lg">
+        <Checkbox 
+          isDisabled={disabled} 
+          color='danger' 
+          radius="md"
+          isSelected={isCompleted}
+          onValueChange={setIsCompleted}
+        />
 
-      <Textarea
-        disabled={disabled}
-        placeholder={todo.todo}
-      >
-      </Textarea>
-      <Tooltip 
-        content="Edit Todo"
-        color="danger"
-        showArrow={true}
-        offset={-13}
-        // delay={1000}
-      >
-        <img src='/gear-svgrepo-com.svg' className="w-7 ml-3 hover:w-8 transition-all" onClick={() => setDisabled(prevDisabled => !prevDisabled)}/>
-      </Tooltip>
+        <Textarea
+          isReadOnly={disabled}
+          placeholder={todo.todo}
+          variant="flat" // flat faded bordered underlined
+          // color='danger'
+        >
+        </Textarea>
+        <Tooltip 
+          content="Edit Todo"
+          color="danger"
+          showArrow={true}
+          offset={-13}
+          // delay={1000}
+        >
+          <img src='/gear-svgrepo-com.svg' className="w-7 ml-3 hover:rotate-90 transition-all" onClick={() => setDisabled(prevDisabled => !prevDisabled)}/>
+        </Tooltip>
+      </div>    
+      <Divider className="bg-default-300"/>
     </div>
   )
 }

@@ -3,7 +3,6 @@
 import axios from "axios"
 import { useState, useEffect } from "react"
 import ToDo from "./components/Todo"
-import { todo } from "node:test"
 import { Spinner } from "@nextui-org/react"
 
 export default function ToDoPage() {
