@@ -4,8 +4,10 @@ import axios from "axios"
 import { useState, useEffect } from "react"
 import ToDo from "./components/Todo"
 import { Spinner } from "@nextui-org/react"
+import { useRouter } from "next/navigation"
 
 export default function ToDoPage() {
+  const router = useRouter()
   const [user, setUser] = useState<User | null>(null)
   const [todoList, setTodoList] = useState<Todo[] | null>(null)
   const [loading, setLoading] = useState(false)
@@ -18,7 +20,7 @@ export default function ToDoPage() {
         setLoading(true)
         // get user
         const userResponse = await axios.get('/api/users/loggedInUser')
-        const fetchedUser = userResponse.data.user
+        const fetchedUser: User = userResponse.data.user
         setUser(fetchedUser)
         // get todo data of user
         if (fetchedUser) {
@@ -29,7 +31,7 @@ export default function ToDoPage() {
       }
       catch (error: any) {
         console.log(error.message)
-        setUser(null)
+        // setUser(null)
         setTodoListExists(false)
       }
       finally {
@@ -39,9 +41,21 @@ export default function ToDoPage() {
     getLoggedInUser()
   }, [])
 
+  const createTodoList = async () => {
+    if (user) {
+      try {
+        const response = await axios.post('/api/users/todoList', user)
+        console.log(response)
+      }
+      catch (error: any){
+        console.log(error)
+      }
+    }
+  }
+
   return (
     <div className="flex flex-col min-h-screen justify-center items-center">
-      todo page
+      {user?.name}'s todo page
       {/* <button onClick={getToDoList}>click me</button> */}
 
       <div className="flex flex-col items-center justify-center bg-default-400 p-12 rounded-lg">
@@ -52,7 +66,7 @@ export default function ToDoPage() {
             <ToDo key={todoCollection.$id} todo={todoCollection} />
           ))
         }
-        {!todoListExists && "No ToDo List Create One Now"}
+        {!todoListExists && <h1 onClick={createTodoList}>No ToDo List Create One Now</h1>}
       </div>
     </div>
   )
