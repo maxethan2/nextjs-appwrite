@@ -5,6 +5,7 @@ import { useState, useEffect } from "react"
 import ToDo from "./components/Todo"
 import { Spinner } from "@nextui-org/react"
 import { useRouter } from "next/navigation"
+import { Button } from "@nextui-org/react"
 
 export default function ToDoPage() {
   const router = useRouter()
@@ -13,38 +14,39 @@ export default function ToDoPage() {
   const [loading, setLoading] = useState(false)
   const [todoListExists, setTodoListExists] = useState(true)
 
-  // set user and todoList
+  // set user and todoList on load
   useEffect(() => {
-    const getLoggedInUser = async () => {
-      try {
-        setLoading(true)
-        // get user
-        const userResponse = await axios.get('/api/users/loggedInUser')
-        const fetchedUser: User = userResponse.data.user
-        setUser(fetchedUser)
-        // get todo data of user
-        if (fetchedUser) {
-          // Fetch todo data for the user
-          const todoResponse = await axios.get('/api/users/todoList', { params: { userID: fetchedUser.$id } })
-          setTodoList(todoResponse.data.todoList.documents)
-        }
-      }
-      catch (error: any) {
-        console.log(error.message)
-        // setUser(null)
-        setTodoListExists(false)
-      }
-      finally {
-        setLoading(false)
-      }
-    }
     getLoggedInUser()
   }, [])
+  // set user and todoList
+  const getLoggedInUser = async () => {
+    try {
+      setLoading(true)
+      // get user
+      const userResponse = await axios.get('/api/users/loggedInUser')
+      const fetchedUser: User = userResponse.data.user
+      setUser(fetchedUser)
+      // get todo data of user
+      if (fetchedUser) {
+        // Fetch todo data for the user
+        const todoResponse = await axios.get('/api/users/todoList', { params: { userID: fetchedUser.$id } })
+        setTodoList(todoResponse.data.todoList.documents)
+      }
+    }
+    catch (error: any) {
+      console.log(error.message)
+      // setUser(null)
+      setTodoListExists(false)
+    }
+    finally {
+      setLoading(false)
+    }
+  }
 
   const createTodoList = async () => {
     if (user) {
       try {
-        const response = await axios.post('/api/users/todoList', user)
+        const response = await axios.post('/api/users/todoList/create', user)
         console.log(response)
       }
       catch (error: any){
@@ -66,7 +68,11 @@ export default function ToDoPage() {
             <ToDo key={todoCollection.$id} todo={todoCollection} />
           ))
         }
-        {!todoListExists && <h1 onClick={createTodoList}>No ToDo List Create One Now</h1>}
+        {!todoListExists && (<div>
+          <h1>No ToDo List Create One Now</h1>
+          <Button color="danger" variant="shadow" onClick={createTodoList}>Create Todo List</Button>
+        </div>
+        )}
       </div>
     </div>
   )
