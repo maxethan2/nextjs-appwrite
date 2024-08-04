@@ -27,8 +27,47 @@ export async function GET(request: NextRequest) {
   }
 }
 
+// // create a sample todo
+// const sampleTodo = await databases.createDocument(
+//   process.env.NEXT_DATABASE_ID!,
+//   userID!, // collection id === userid
+//   ID.unique(),
+//   {
+//     completed: true,
+//     todo: "Create Your First Todo List!"
+//   }
+// )
+
 // POST 
 // create a new document/todo
+export async function POST(request: NextRequest) {
+  const client = new Client()
+    .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT!)
+    .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT!)
+    .setKey(process.env.NEXT_APPWRITE_KEY!)
+
+  const databases = new Databases(client)
+  const requestBody = await request.json()
+  const {$id} = requestBody
+
+  try {
+    const newTodo = await databases.createDocument(
+      process.env.NEXT_DATABASE_ID!,
+      $id,
+      ID.unique(),
+      {
+        completed: false,
+        todo: "New Todo"
+      }
+    )
+
+    return NextResponse.json({message: "Successfully Created New Todo", success: true, data: newTodo})
+  }
+  catch (error: any ) {
+    return NextResponse.json({ message: 'Error Creating Document', error: error.message }, 
+      { status: 500 })
+  }
+}
 
 // PUT
 // update documents/todos based on given ids and values

@@ -90,8 +90,21 @@ export default function ToDoPage() {
     }
   }
 
-  const addTodo = async () {
-    console.log('add me lol')
+  const addTodo = async () => {
+    try {
+      const response = await axios.post("/api/users/todoList", user)
+      const newTodo: Todo = response.data.data
+
+      // add newTodo to local todo to avoid reftching data
+      setTodoList(prevTodoList => {
+        const newTodoList = [...prevTodoList!]
+        newTodoList.push(newTodo)
+        return newTodoList
+      })
+    }
+    catch (error: any) {
+      console.log(error.message)
+    }
   }
 
   return (
@@ -106,6 +119,7 @@ export default function ToDoPage() {
               variant="shadow"
               color="danger"
               className="ml-3"
+              onClick={addTodo}
             >
               <AddIcon />
             </Button>
