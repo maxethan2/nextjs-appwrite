@@ -4,8 +4,6 @@ import { Client, Databases, ID } from "node-appwrite"
 // create collection inside of todo database
 // create attributes string: todo boolean: completed
 export async function POST(request: NextRequest) {
-
-  console.log('im here')
   const client = new Client()
     .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT!)
     .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT!)

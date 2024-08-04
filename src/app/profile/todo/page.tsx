@@ -6,6 +6,8 @@ import ToDo from "./components/Todo"
 import { Spinner } from "@nextui-org/react"
 import { useRouter } from "next/navigation"
 import { Button } from "@nextui-org/react"
+import {Card, CardHeader, CardBody, CardFooter, Link, Image} from "@nextui-org/react";
+import AddIcon from '@mui/icons-material/Add';
 
 export default function ToDoPage() {
   const router = useRouter()
@@ -43,6 +45,7 @@ export default function ToDoPage() {
     }
   }
 
+  // create a todolist collection document and attributes if the user is new and doesnt have one yet
   const createTodoList = async () => {
     if (user) {
       try {
@@ -55,25 +58,74 @@ export default function ToDoPage() {
     }
   }
 
+  // take id and collection id from todo component and delete todo from database
+  // after databse call works successfully then delete the todo form the local todo array
+  const deleteTodo = async (id: string, collectionId: string) => {
+    // deleting todo from database
+    try {
+      const response = await axios.delete('/api/users/todoList', {
+        params: {
+          id: id,
+          collectionId: collectionId
+        }
+      })
+
+      // delete todo from local todo[]
+      const positionOfDeletedTodo = todoList?.map(e => e.$id).indexOf(id)
+      if (positionOfDeletedTodo) {
+        // todoList?.splice(positionOfDeletedTodo, 1)
+        setTodoList(prevTodoList => {
+          // create copy to splice then return
+          const newTodoList = [...prevTodoList!]
+          newTodoList.splice(positionOfDeletedTodo, 1)
+          return newTodoList
+        })
+      }
+      else {
+        console.log('Index Does Not Exists')
+      }
+    }
+    catch (error: any) {
+      console.log(error.message)
+    }
+  }
+
+  const addTodo = async () {
+    console.log('add me lol')
+  }
+
   return (
     <div className="flex flex-col min-h-screen justify-center items-center">
-      {user?.name}'s todo page
-      {/* <button onClick={getToDoList}>click me</button> */}
-
-      <div className="flex flex-col items-center justify-center bg-default-400 p-12 rounded-lg">
-        {/* {todoList && <ToDo todo={todoList[0]}/>} */}
-        {/* {todoListMapped} */}
-        {loading ? <Spinner color="danger"/> :
-          todoList?.slice().reverse().map(todoCollection => (
-            <ToDo key={todoCollection.$id} todo={todoCollection} />
-          ))
-        }
-        {!todoListExists && (<div>
-          <h1>No ToDo List Create One Now</h1>
-          <Button color="danger" variant="shadow" onClick={createTodoList}>Create Todo List</Button>
+      {user?.name}&apos;s todo page
+      <Card className="bg-secondary-50 flex flex-col justify-center items-center px-12 pb-12">
+        <CardHeader className="flex flex-row">
+          <div className="flex m-auto">
+            <h1 className="my-auto">Add New Todo</h1>
+            <Button
+              isIconOnly={true}
+              variant="shadow"
+              color="danger"
+              className="ml-3"
+            >
+              <AddIcon />
+            </Button>
+          </div>
+        </CardHeader>
+        
+        <div className="flex flex-col items-center justify-center rounded-lg">
+          {loading ? <Spinner color="danger"/> :
+            todoList?.slice().reverse().map(todoCollection => (
+              <ToDo key={todoCollection.$id} todo={todoCollection} deleteTodo={deleteTodo}/>
+            ))
+          }
+          {!todoListExists && (<div>
+            <h1>No ToDo List Create One Now</h1>
+            <Button color="danger" variant="shadow" onClick={createTodoList}>Create Todo List</Button>
+          </div>
+          )}
         </div>
-        )}
-      </div>
+      </Card>
+      
     </div>
   )
 }

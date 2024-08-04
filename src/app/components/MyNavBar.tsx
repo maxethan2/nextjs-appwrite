@@ -65,10 +65,12 @@ export default function MyNavbar() {
       {pathname === '/login' && <BreadcrumbItem>Login</BreadcrumbItem>}
       {pathname === '/signup' && <BreadcrumbItem>Signup</BreadcrumbItem>}
 
-      {/* {pathname === '/todo' && (
-        <BreadcrumbItem>Profile</BreadcrumbItem>
-        <BreadcrumbItem>Todo</BreadcrumbItem> 
-      )} */}
+      {pathname === '/profile/todo' && (
+        <>
+          <BreadcrumbItem>Profile</BreadcrumbItem>
+          <BreadcrumbItem>Todo</BreadcrumbItem> 
+        </>
+      )}
     </Breadcrumbs>
   )
 
