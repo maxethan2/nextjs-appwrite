@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation"
 import { Button } from "@nextui-org/react"
 import {Card, CardHeader, CardBody, CardFooter, Link, Image} from "@nextui-org/react";
 import AddIcon from '@mui/icons-material/Add';
+import toast, {Toaster} from "react-hot-toast"
 
 export default function ToDoPage() {
   const router = useRouter()
@@ -71,8 +72,8 @@ export default function ToDoPage() {
       })
 
       // delete todo from local todo[]
-      const positionOfDeletedTodo = todoList?.map(e => e.$id).indexOf(id)
-      if (positionOfDeletedTodo) {
+      const positionOfDeletedTodo = todoList!.map(e => e.$id).indexOf(id)
+      if (positionOfDeletedTodo && positionOfDeletedTodo != 0) {
         // todoList?.splice(positionOfDeletedTodo, 1)
         setTodoList(prevTodoList => {
           // create copy to splice then return
@@ -80,13 +81,26 @@ export default function ToDoPage() {
           newTodoList.splice(positionOfDeletedTodo, 1)
           return newTodoList
         })
+        toast.success("Deleted Todo")
+      }
+      else if (positionOfDeletedTodo === 0 && todoList!.length === 1) {
+        setTodoList([])
+        toast.success("Deleted Todo")
+      }
+      else if (positionOfDeletedTodo === 0 && todoList!.length != 1) {
+        setTodoList(prevTodoList => {
+          const newTodoList = [...prevTodoList!]
+          newTodoList.shift()
+          return newTodoList
+        })
+        toast.success("Deleted Todo")
       }
       else {
-        console.log('Index Does Not Exists')
+        toast.error("Index Does Not Exist")
       }
     }
     catch (error: any) {
-      console.log(error.message)
+      toast.error(error.response.data.error)
     }
   }
 
@@ -101,6 +115,7 @@ export default function ToDoPage() {
         newTodoList.push(newTodo)
         return newTodoList
       })
+      toast.success('Created New Todo')
     }
     catch (error: any) {
       console.log(error.message)
@@ -115,13 +130,16 @@ export default function ToDoPage() {
         isCompleted: isCompleted,
         todoText: todoText
       })
+      toast.success("Updated Todo Item")
     }
     catch (error: any) {
-      console.log(error.message)
+      toast.error(error.message)
     }
   }
 
   return (
+    <>
+    <Toaster />
     <div className="flex flex-col min-h-screen justify-center items-center pt-20">
       {user?.name}&apos;s todo page
       <Card className="bg-divider flex flex-col justify-center items-center px-12 pb-12">
@@ -164,5 +182,6 @@ export default function ToDoPage() {
         </div>
       </Card>
     </div>
+    </>
   )
 }

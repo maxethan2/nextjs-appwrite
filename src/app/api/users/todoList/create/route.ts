@@ -45,7 +45,7 @@ export async function POST(request: NextRequest) {
       process.env.NEXT_DATABASE_ID!,
       userID!, // collection id === userid
       'todo', // key
-      128, // size
+      256, // size
       true, // required
       undefined, // default
       false, // array
@@ -58,7 +58,7 @@ export async function POST(request: NextRequest) {
       userID!, // collection id === userid
       ID.unique(),
       {
-        completed: true,
+        completed: false,
         todo: "Create Your First Todo List!"
       }
     )

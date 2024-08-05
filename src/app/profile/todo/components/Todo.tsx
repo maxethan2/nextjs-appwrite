@@ -22,7 +22,7 @@ export default function ToDo({ todo, deleteTodo, updateTodo }: Props) {
     <Card className="flex flex-col mb-3 bg-default-300">
       <div className="flex flex-row p-2 rounded-lg">
         <Checkbox 
-          isDisabled={disabled} 
+          // isDisabled={disabled} 
           color='danger' 
           radius="md"
           isSelected={isCompleted}
@@ -30,7 +30,7 @@ export default function ToDo({ todo, deleteTodo, updateTodo }: Props) {
         />
 
         <Textarea
-          isReadOnly={disabled}
+          // isReadOnly={disabled}
           placeholder={todo.todo}
           variant="flat" // flat faded bordered underlined
           // color='danger'
@@ -39,7 +39,7 @@ export default function ToDo({ todo, deleteTodo, updateTodo }: Props) {
           style={isCompleted ? {textDecoration: 'line-through'} : {}}
         >
         </Textarea>
-
+{/* 
         <div className="flex items-center justify-center ml-4 transition-all" 
           onClick={() => setDisabled(prevDisabled => !prevDisabled)}
         >
@@ -51,7 +51,7 @@ export default function ToDo({ todo, deleteTodo, updateTodo }: Props) {
           >
             <SettingsIcon className="text-default-100 hover:text-danger-500 m-auto active:text-danger-600 transition-all" fontSize="large"/>
           </Tooltip>
-        </div>
+        </div> */}
 
         <div className="flex items-center justify-center ml-4" 
           onClick={() => deleteTodo(todo.$id, todo.$collectionId)}
