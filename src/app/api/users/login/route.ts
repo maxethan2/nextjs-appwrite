@@ -2,32 +2,6 @@ import { NextRequest, NextResponse } from "next/server";
 import { createAdminClient, createSessionClient } from "@/lib/server/appwrite";
 import { cookies } from "next/headers";
 
-
-// export async function loginWithEmail(formData: any) {
-//   'use server'
-//   const email = formData.get('email')
-//   const password = formData.get('password')
-
-//   try {
-//     const {account} = await createAdminClient()
-//     const session = await account.createEmailPasswordSession(email, password)
-
-//     cookies().set('my-custom-session', session.secret, {
-//       path: '/',
-//       httpOnly: true,
-//       sameSite: 'strict',
-//       secure: true,
-//       // expires: Date.now() + 3600
-//     })
-
-//     redirect('/account')
-//   }
-//   catch (error: any) {
-//     console.log(error.message)
-//     return(error.message)
-//   }
-// }
-
 export async function POST(request: NextRequest) {
   const requestBody = await request.json()
   const {email, password} = requestBody

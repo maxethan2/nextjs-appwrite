@@ -27,17 +27,6 @@ export async function GET(request: NextRequest) {
   }
 }
 
-// // create a sample todo
-// const sampleTodo = await databases.createDocument(
-//   process.env.NEXT_DATABASE_ID!,
-//   userID!, // collection id === userid
-//   ID.unique(),
-//   {
-//     completed: true,
-//     todo: "Create Your First Todo List!"
-//   }
-// )
-
 // POST 
 // create a new document/todo
 export async function POST(request: NextRequest) {
