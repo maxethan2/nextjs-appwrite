@@ -53,7 +53,7 @@ export async function POST(request: NextRequest) {
   try {
     const newTodo = await databases.createDocument(
       process.env.NEXT_DATABASE_ID!,
-      $id,
+      $id, // user id === collection id
       ID.unique(),
       {
         completed: false,
@@ -71,6 +71,34 @@ export async function POST(request: NextRequest) {
 
 // PUT
 // update documents/todos based on given ids and values
+export async function PUT(request: NextRequest) {
+  const client = new Client()
+    .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT!)
+    .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT!)
+    .setKey(process.env.NEXT_APPWRITE_KEY!)
+
+  const databases = new Databases(client)
+  const requestBody = await request.json()
+  const {id, collectionId, todoText, isCompleted} = requestBody
+
+  try {
+    const updatedTodo = databases.updateDocument(
+      process.env.NEXT_DATABASE_ID!,
+      collectionId,
+      id,
+      {
+        completed: isCompleted,
+        todo: todoText
+      }
+    )
+
+    return NextResponse.json({message: "Successfully Updated Todo", success: true, data: updatedTodo})
+  }
+  catch (error: any) {
+    return NextResponse.json({ message: 'Error Updating Document', error: error.message }, 
+      { status: 500 })
+  }
+}
 
 // DELETE
 // delete a document/todo based on a given id

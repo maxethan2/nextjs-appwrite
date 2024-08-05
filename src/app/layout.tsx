@@ -20,7 +20,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${inter.className} bg-default-50 text-foreground`}>
         <Providers>
-          <MyNavbar />
+          <MyNavbar/>
           {children}
         </Providers>
       </body>

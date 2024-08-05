@@ -75,12 +75,21 @@ export default function MyNavbar() {
   )
 
   return (
-    <div className="flex flex-col items-center justify-center">
-      <Toaster />
+    // <div className="flex flex-col items-center justify-center">
+      // <Toaster />
 
-      <Navbar position="static" isBordered className='flex flex-row items-center justify-center bg-default-100'>
+      <Navbar 
+        // position="static" 
+        isBordered={true}
+        // className='flex flex-row items-center justify-center bg-default-100 m-0 p-0'
+        className='fixed top-0 left-0 w-full z-50 bg-default-100 flex flex-row items-center justify-center m-0 p-0'
+        >
         <NavbarContent>
           {breadcrumbs}
+        </NavbarContent>
+
+        <NavbarContent>
+          <Toaster />
         </NavbarContent>
 
         <div>
@@ -97,6 +106,6 @@ export default function MyNavbar() {
         </div>
 
       </Navbar>
-    </div>
+    // </div>
   )
 }

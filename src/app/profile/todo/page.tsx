@@ -107,39 +107,62 @@ export default function ToDoPage() {
     }
   }
 
+  const updateTodo = async (id: string, collectionId: string, isCompleted: boolean, todoText: string) => {
+    try{
+      const response = await axios.put('/api/users/todoList', {
+        id: id,
+        collectionId: collectionId,
+        isCompleted: isCompleted,
+        todoText: todoText
+      })
+    }
+    catch (error: any) {
+      console.log(error.message)
+    }
+  }
+
   return (
-    <div className="flex flex-col min-h-screen justify-center items-center">
+    <div className="flex flex-col min-h-screen justify-center items-center pt-20">
       {user?.name}&apos;s todo page
-      <Card className="bg-secondary-50 flex flex-col justify-center items-center px-12 pb-12">
+      <Card className="bg-divider flex flex-col justify-center items-center px-12 pb-12">
         <CardHeader className="flex flex-row">
-          <div className="flex m-auto">
-            <h1 className="my-auto">Add New Todo</h1>
-            <Button
-              isIconOnly={true}
-              variant="shadow"
-              color="danger"
-              className="ml-3"
-              onClick={addTodo}
-            >
-              <AddIcon />
-            </Button>
-          </div>
+          {/* dont render add todolist button if todo list does not exist */}
+          {
+            todoList ?
+            (
+              <div className="flex m-auto">
+                <h1 className="my-auto">Add New Todo</h1>
+                <Button
+                  isIconOnly={true}
+                  variant="shadow"
+                  color="danger"
+                  className="ml-3"
+                  onClick={addTodo}
+                >
+                  <AddIcon />
+                </Button>
+              </div>
+            )
+            : (<></>)
+          }
         </CardHeader>
         
         <div className="flex flex-col items-center justify-center rounded-lg">
-          {loading ? <Spinner color="danger"/> :
-            todoList?.slice().reverse().map(todoCollection => (
-              <ToDo key={todoCollection.$id} todo={todoCollection} deleteTodo={deleteTodo}/>
-            ))
+          {loading 
+            ? <Spinner color="danger"/> 
+            :
+              todoList?.slice().reverse().map(todoCollection => (
+                <ToDo key={todoCollection.$id} todo={todoCollection} deleteTodo={deleteTodo} updateTodo={updateTodo}/>
+              ))
           }
-          {!todoListExists && (<div>
-            <h1>No ToDo List Create One Now</h1>
-            <Button color="danger" variant="shadow" onClick={createTodoList}>Create Todo List</Button>
-          </div>
+          {!todoListExists && (
+            <div>
+              <h1>No ToDo List Create One Now</h1>
+              <Button color="danger" variant="shadow" onClick={createTodoList}>Create Todo List</Button>
+            </div>
           )}
         </div>
       </Card>
-      
     </div>
   )
 }
