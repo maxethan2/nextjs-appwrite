@@ -23,7 +23,6 @@ export default function LoginPage() {
 
       const response = await axios.post('/api/users/login', user)
       toast.success(response.data.message)
-      router.push('/profile')
     }
     catch (error: any) {
       const errorMessage = error.response.data.error
@@ -31,6 +30,7 @@ export default function LoginPage() {
     }
     finally {
       setLoading(false)
+      router.push('/profile')
     }
   }
 

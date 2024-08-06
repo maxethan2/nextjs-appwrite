@@ -24,7 +24,6 @@ export default function SignUpPage() {
 
       const response = await axios.post('/api/users/signup', user)
       toast.success(response.data.message)
-      router.push('/login')
     }
     catch (error: any) {
       const errorMessage = error.response.data.error
@@ -32,6 +31,7 @@ export default function SignUpPage() {
     }
     finally {
       setLoading(false)
+      router.push('/login')
     }
   }
 

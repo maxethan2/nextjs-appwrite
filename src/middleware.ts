@@ -1,26 +1,23 @@
 import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
-import { useRouter } from "next/navigation";
+import { NextRequest } from "next/server";
+import { redirect, useRouter } from "next/navigation";
+import { revalidatePath } from "next/cache";
 
 export function middleware(request: NextRequest) {
   const path = request.nextUrl.pathname
 
-  const isPublicPath = path === '/login' || path === '/signup' || path === '/verifyemail'
+  const isPublicPath = path === '/login' || path === '/signup'
 
   const token = request.cookies.get('my-custom-session')?.value || ''
 
-  // trying to access public path and you have a login token
-  // if (isPublicPath && token != '') {
-  //   return NextResponse.redirect(new URL('/', request.nextUrl))
-  // }
-  // // trying to access a private path ie: profile with no login token
-  // if (!isPublicPath && token == '') {
-  //   return NextResponse.redirect(new URL("/signup", request.nextUrl))
-  // }
-
-  // if (path === '/profile' && token === '') {
-  //   return NextResponse.redirect(new URL('/', request.nextUrl))
-  // }
+  // accessing public path and you are logged in
+  if (isPublicPath && token != '') {
+    return NextResponse.redirect(new URL('/profile', request.url))
+  }
+  // accessing private path and you arent logged in
+  if (!isPublicPath && token == '') {
+    return NextResponse.redirect(new URL('/signup', request.url))
+  }
 }
 
 export const config = {
@@ -28,6 +25,7 @@ export const config = {
     // '/',
     '/login',
     '/signup',
-    '/profile'
+    '/profile/:path*',
+    // '/profile/todo'
   ]
 }
