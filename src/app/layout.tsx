@@ -8,7 +8,7 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Appwrite Yea Im eepy",
-  description: "NextJs App use Appwrite for authentication.",
+  description: "NextJs App using Appwrite for authentication, databse todo storage and more coming in the future!",
 };
 
 export default function RootLayout({

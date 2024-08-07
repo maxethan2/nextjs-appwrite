@@ -2,17 +2,20 @@
 import { Suspense, useEffect, useState } from "react";
 import axios from "axios";
 import { CircularProgress } from "@nextui-org/react";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
+import {Card, CardHeader, CardBody, CardFooter, Divider, Image, Skeleton, Button,
+  Dropdown, DropdownTrigger, DropdownMenu, DropdownSection, DropdownItem} from "@nextui-org/react";
 
 export default function HomePage() {
+  const router = useRouter()
   const [user, setUser] = useState<User | null>(null)
-  const [loading, setLoading] = useState(false)
+  const [isLoaded, setIsLoaded] = useState(true)
 
   useEffect(() => {
     const getLoggedInUser = async () => {
       try {
-        setLoading(true)
+        setIsLoaded(false)
 
         const response = await axios.get('/api/users/loggedInUser')
         setUser(response.data.user)
@@ -21,7 +24,7 @@ export default function HomePage() {
         console.log(error.message)
       }
       finally {
-        setLoading(false)
+        setIsLoaded(true)
       }
     }
 
@@ -30,30 +33,80 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen flex flex-col justify-center items-center bg-default-50">
-      <div>
-        {
-          !loading ? 
-          (
-            <ul>
-              <li>
-                {`Name: ${user && user.name}`}
-              </li>
-              <li>
-                {`Email: ${user && user.email}`}
-              </li>
-              <li>
-                {`UserId: ${user && user.$id}`}
-              </li>
-            </ul>          
-          )
-          :
-          (
-            <CircularProgress size='lg' color='danger'/>
-          )
-        }
-      </div>
-      <div className="flex bg-default-200 p-6">
-        <Link href='/profile/todo'>Todo List</Link>
+      <Card className="max-w-[600px]">
+        <CardHeader className="flex flex-row gap-3">
+          <Image 
+            src='./shyguy.png'
+          />
+          <Skeleton isLoaded={isLoaded} className='rounded-lg'>
+            <div>
+              <h1>{user?.name}</h1>
+              <h1>{user?.email}</h1>
+            </div>
+          </Skeleton>
+
+          <Dropdown>
+            <DropdownTrigger>
+              <Button
+                variant="shadow"
+                color="danger"
+              >
+                Settings
+              </Button>
+            </DropdownTrigger>
+            <DropdownMenu aria-label="Static Actions">
+              <DropdownItem key="new">Verify Email</DropdownItem>
+              <DropdownItem key="copy">Verify Phone</DropdownItem>
+              <DropdownItem key="edit">Change Password</DropdownItem>
+              <DropdownItem key="delete" className="text-danger" color="danger">
+                Delete Account
+              </DropdownItem>
+            </DropdownMenu>
+          </Dropdown>
+        </CardHeader>
+      </Card>
+
+
+      <div className="flex flex-row mt-3">
+        <Card className="max-w-[350px] bg-content2">
+          <CardHeader>
+            Your Personal Todo List
+          </CardHeader>
+          <Divider />
+          <CardBody>
+            Appwrite database that allows every indavidual user to have their own personal Todo List.
+          </CardBody>
+          <Divider />
+          <CardFooter>
+            <Button
+              radius="md" 
+              className="bg-gradient-to-tr from-danger-400 to-danger-200 text-default-800 shadow-lg m-auto"
+              onClick={() => router.push('/profile/todo')}
+            >
+              Go to Todo List
+            </Button>
+          </CardFooter>
+        </Card>
+
+        <Card className="max-w-[350px] ml-3 bg-content2">
+          <CardHeader>
+            YOUR PERSONAL TBD IDK
+          </CardHeader>
+          <Divider />
+          <CardBody>
+            there will besomething here at somepoint hopefully sure hopefulle yea thats sometyhing that should be here. what will it be??? who knows maybe something with storage or functions
+          </CardBody>
+          <Divider />
+          <CardFooter>
+            <Button
+              radius="md" 
+              className="bg-gradient-to-tr from-danger-400 to-danger-200 text-default-800 shadow-lg m-auto"
+              onClick={() => router.push('/')}
+            >
+              Go to Something
+            </Button>
+          </CardFooter>
+        </Card>
       </div>
     </div>
   );
