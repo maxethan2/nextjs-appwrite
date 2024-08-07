@@ -16,10 +16,11 @@ import { ThemeSwitcher } from "./ThemeSwitcher";
 import { useRouter, usePathname } from "next/navigation"; 
 import Link from "next/link";
 
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-
+import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
 
 export default function MyNavbar() {
   const router = useRouter()
@@ -27,6 +28,11 @@ export default function MyNavbar() {
   const [user, setUser] = useState<User | null>(null)
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const [chevronState, setChevronState] = useState({
+    profile: false,
+    tbd: false
+  })
 
   useEffect(() => {
     const getLoggedInUser = async () => {
@@ -85,6 +91,7 @@ export default function MyNavbar() {
             className="hover:cursor-pointer"
             onClick={() => router.push('/')}
           />
+          <h1 className='font-bold'>Appwrite Project</h1>
         </NavbarContent>
 
         <NavbarContent>
@@ -94,7 +101,13 @@ export default function MyNavbar() {
                 <Button
                   disableRipple
                   className="p-0 bg-transparent data-[hover=true]:bg-transparent"
-                  endContent={<KeyboardArrowDownIcon />}
+                  endContent={chevronState.profile ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+                  // onClick={() => setChevronState(prevChevronState => (
+                  //   {
+                  //     ...prevChevronState,
+                  //     profile: !prevChevronState.profile
+                  //   }
+                  // ))}
                   radius="sm"
                   variant="light"
                 >
@@ -125,6 +138,48 @@ export default function MyNavbar() {
                 onClick={() => router.push('/profile/todo')}
               >
                 Todo List
+              </DropdownItem>
+
+            </DropdownMenu>
+          </Dropdown>
+
+          <Dropdown>
+            <NavbarItem>
+              <DropdownTrigger>
+                <Button
+                  disableRipple
+                  className="p-0 bg-transparent data-[hover=true]:bg-transparent"
+                  endContent={<KeyboardArrowDownIcon />}
+                  radius="sm"
+                  variant="light"
+                >
+                  TBD
+                </Button>
+              </DropdownTrigger>
+            </NavbarItem>
+
+            <DropdownMenu
+              aria-label="Profile Features"
+              className="w-[340px]"
+              itemClasses={{
+                base: "gap-4",
+              }}
+            >
+              <DropdownItem
+                key='autoscalling'
+                description="Something will be added here eventually ??omething will be added here eventually ??omething will be added here eventually ??omething will be added here eventually ???"
+                startContent={<QuestionMarkIcon className="text-danger-400" fontSize="large"/>}
+                onClick={() => router.push('/')}
+              >
+                Something
+              </DropdownItem>
+              <DropdownItem
+                key='autoscalling'
+                description="Yea for sure something will be added here in the future"
+                startContent={<QuestionMarkIcon className="text-danger-400" fontSize="large"/>}
+                onClick={() => router.push('/')}
+              >
+                Future Stuff
               </DropdownItem>
 
             </DropdownMenu>

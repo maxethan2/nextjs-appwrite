@@ -8,6 +8,9 @@ export function middleware(request: NextRequest) {
 
   const isPublicPath = path === '/login' || path === '/signup'
 
+  const isApiPath = path.startsWith('/api/')
+  const isApiAuthPath = path === '/api/users/login' || path === '/api/users/signup';
+
   const token = request.cookies.get('my-custom-session')?.value || ''
 
   // accessing public path and you are logged in
@@ -18,6 +21,10 @@ export function middleware(request: NextRequest) {
   if (!isPublicPath && token == '') {
     return NextResponse.redirect(new URL('/signup', request.url))
   }
+  // make sure that anybody who accesses api routes have a token
+  if (isApiPath && !token && !isApiAuthPath) {
+    return new NextResponse('Unauthorized', { status: 403 });
+  }
 }
 
 export const config = {
@@ -27,5 +34,6 @@ export const config = {
     '/signup',
     '/profile/:path*',
     // '/profile/todo'
+    // '/api/:path*',
   ]
 }

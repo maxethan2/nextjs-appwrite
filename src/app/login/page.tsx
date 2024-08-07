@@ -23,6 +23,7 @@ export default function LoginPage() {
 
       const response = await axios.post('/api/users/login', user)
       toast.success(response.data.message)
+      console.log(response)
     }
     catch (error: any) {
       const errorMessage = error.response.data.error
