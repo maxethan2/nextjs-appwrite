@@ -89,7 +89,10 @@ export default function MyNavbar() {
             src='./shyguy.png'
             alt='Shy Guy Icon'
             className="hover:cursor-pointer"
-            onClick={() => router.push('/')}
+            onClick={() => {
+              router.refresh()
+              router.replace('/')}
+            }
           />
           <h1 className='font-bold'>Appwrite Project</h1>
         </NavbarContent>

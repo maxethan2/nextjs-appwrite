@@ -6,6 +6,8 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import {Card, CardHeader, CardBody, CardFooter, Divider, Image, Skeleton, Button,
   Dropdown, DropdownTrigger, DropdownMenu, DropdownSection, DropdownItem} from "@nextui-org/react";
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+
 
 export default function HomePage() {
   const router = useRouter()
@@ -32,7 +34,7 @@ export default function HomePage() {
   }, [])
 
   return (
-    <div className="min-h-screen flex flex-col justify-center items-center bg-default-50">
+    <div className="min-h-screen flex flex-col justify-center items-center bg-background">
       <Card className="max-w-[600px]">
         <CardHeader className="flex flex-row gap-3">
           <Image 
@@ -50,6 +52,7 @@ export default function HomePage() {
               <Button
                 variant="shadow"
                 color="danger"
+                endContent={<KeyboardArrowDownIcon />}
               >
                 Settings
               </Button>
@@ -68,7 +71,7 @@ export default function HomePage() {
 
 
       <div className="flex flex-row mt-3">
-        <Card className="max-w-[350px] bg-content2">
+        <Card className="max-w-[350px] bg-gradient-to-tr from-danger-200 from-10% to-danger-300 to-65% text-default-800">
           <CardHeader>
             Your Personal Todo List
           </CardHeader>
@@ -80,7 +83,9 @@ export default function HomePage() {
           <CardFooter>
             <Button
               radius="md" 
-              className="bg-gradient-to-tr from-danger-400 to-danger-200 text-default-800 shadow-lg m-auto"
+              // className="bg-gradient-to-tr from-danger-400 to-danger-200 text-default-800 shadow-lg m-auto"
+              className="m-auto"
+              variant="flat"
               onClick={() => router.push('/profile/todo')}
             >
               Go to Todo List
@@ -88,7 +93,7 @@ export default function HomePage() {
           </CardFooter>
         </Card>
 
-        <Card className="max-w-[350px] ml-3 bg-content2">
+        <Card className="max-w-[350px] ml-3 bg-gradient-to-tr from-danger-300 from-40% to-danger-200 to-80%">
           <CardHeader>
             YOUR PERSONAL TBD IDK
           </CardHeader>
@@ -100,7 +105,9 @@ export default function HomePage() {
           <CardFooter>
             <Button
               radius="md" 
-              className="bg-gradient-to-tr from-danger-400 to-danger-200 text-default-800 shadow-lg m-auto"
+              // className="bg-gradient-to-tr from-danger-400 to-danger-200 text-default-800 shadow-lg m-auto"
+              className="m-auto"
+              variant="flat"
               onClick={() => router.push('/')}
             >
               Go to Something

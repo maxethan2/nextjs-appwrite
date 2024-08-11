@@ -140,7 +140,7 @@ export default function ToDoPage() {
   return (
     <>
     <Toaster />
-    <div className="flex flex-col min-h-screen justify-center items-center pt-20">
+    <div className="flex flex-col min-h-screen justify-center items-center pt-20 bg-background">
       {user?.name}&apos;s todo page
       <Card className="bg-divider flex flex-col justify-center items-center px-12 pb-12">
         <CardHeader className="flex flex-row">
