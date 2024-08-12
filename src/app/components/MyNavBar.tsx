@@ -82,18 +82,20 @@ export default function MyNavbar() {
         <NavbarContent>
           <NavbarMenuToggle aria-label={isMenuOpen ? "Close menu" : "Open menu"}
           className="sm:hidden" />
-          <Image 
-            isBlurred
-            isZoomed
-            width={70}
-            src='./shyguy.png'
-            alt='Shy Guy Icon'
-            className="hover:cursor-pointer"
-            onClick={() => {
-              router.refresh()
-              router.replace('/')}
-            }
-          />
+          <Link
+            href='/'
+          >
+            <div className="">
+              <Image 
+                isBlurred
+                isZoomed
+                width={70}
+                src='./shyguy.png'
+                alt='Shy Guy Icon'
+                className="hover:cursor-pointer"
+              />
+            </div>
+          </Link>
           <h1 className='font-bold'>Appwrite Project</h1>
         </NavbarContent>
 
