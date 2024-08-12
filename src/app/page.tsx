@@ -3,12 +3,23 @@ import Link from "next/link"
 
 import {Card, CardHeader, CardBody, CardFooter, Divider, Image, Button} from '@nextui-org/react'
 import { useRouter } from "next/navigation"
+import { TextEffect } from "@/motion-primitives/text-effect"
 
 export default function Home() {
   const router = useRouter()
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-tr from-default-50 from-10% to-danger-200 to-65% text-default-800">
+      
+      <TextEffect 
+        per='word'
+        as='h3'
+        preset="blur"
+        className="text-3xl mb-8 -mt-32 font-extrabold"
+      >
+        Come&nbsp;Learn&nbsp;Appwrite&nbsp;With&nbsp;Me!
+      </TextEffect>
+      
       <Card className='bg-content1 max-w-[400px]' isBlurred={true}>
         <CardHeader>
           <h1 className="text-xl">Welcome to my Appwrite Project</h1>

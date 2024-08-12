@@ -74,9 +74,10 @@ export default function MyNavbar() {
 
       <Navbar 
         // position="static" 
+        isBlurred={true}
         isBordered={true}
         // className='flex flex-row items-center justify-center bg-default-100 m-0 p-0'
-        className='fixed top-0 left-0 w-full z-50 bg-default-100 flex flex-row items-center justify-center m-0 p-0'
+        className='fixed top-0 left-0 w-full z-50 bg-default-100 bg-opacity-60 flex flex-row items-center justify-center m-0 p-0'
         >
 
         <NavbarContent>
