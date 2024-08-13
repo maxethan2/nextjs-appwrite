@@ -89,13 +89,13 @@ export default function Home() {
             <div className="flex flex-row justify-between items-center">
               <p>Visit Nothing</p>
               <Button
-                  className="ml-3 max-w-[10px]"
-                  variant="shadow"
-                  color='danger'
-                  onClick={() => router.push('/thispagedoesnotexist')}
-                  >
-                    Visit
-                </Button>
+                className="ml-3 max-w-[10px]"
+                variant="shadow"
+                color='danger'
+                onClick={() => router.push('/thispagedoesnotexist')}
+                >
+                  Visit
+              </Button>
             </div>
           </CardFooter>
         </Card>

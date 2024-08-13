@@ -3,6 +3,7 @@ import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
 export async function GET() {
+  // remove logged in cookie and delete the current session
   try {
     const { account } = await createSessionClient()
     cookies().delete('my-custom-session')

@@ -14,6 +14,7 @@ export default function HomePage() {
   const [user, setUser] = useState<User | null>(null)
   const [isLoaded, setIsLoaded] = useState(true)
 
+  // fetch the logged in user on load once
   useEffect(() => {
     const getLoggedInUser = async () => {
       try {

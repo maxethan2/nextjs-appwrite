@@ -9,7 +9,7 @@ export async function POST(request: NextRequest) {
   try {
     const { account } = await createAdminClient()
     const session = await account.createEmailPasswordSession(email, password)
-
+    // set logged in cookie
     cookies().set('my-custom-session', session.secret, {
       path: '/',
       httpOnly: true,
@@ -17,7 +17,7 @@ export async function POST(request: NextRequest) {
       secure: true,
       // expires: Date.now() + 3600
     })
-
+    
     return NextResponse.json(
       {
         message: "Login Succeessful",

@@ -83,10 +83,15 @@ export default function ToDoPage() {
         })
         toast.success("Deleted Todo")
       }
+      // deleted todo is first in the array and the todo list contains that single todo
+      // then set the todo list to an empty array
       else if (positionOfDeletedTodo === 0 && todoList!.length === 1) {
         setTodoList([])
         toast.success("Deleted Todo")
       }
+      // deleted todo is the first in the array and the todo length is more than one
+      // instead of splicing, shift
+      // This doesnt need to exists ?????????????? 
       else if (positionOfDeletedTodo === 0 && todoList!.length != 1) {
         setTodoList(prevTodoList => {
           const newTodoList = [...prevTodoList!]

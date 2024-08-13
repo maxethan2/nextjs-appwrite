@@ -14,10 +14,10 @@ export async function GET(request: NextRequest) {
 
   const userID = request.nextUrl.searchParams.get('userID')
   try {
+    // get ever todo item from todo database and user's collection
     const todoList = await databases.listDocuments(
       process.env.NEXT_DATABASE_ID!,
-      // collection id === user id
-      userID!
+      userID! // userID === collectionID
     )
     return NextResponse.json({message: 'Successfully Retrived User ToDoList', todoList: todoList})
   }
@@ -39,7 +39,7 @@ export async function POST(request: NextRequest) {
   const requestBody = await request.json()
   const {$id} = requestBody
 
-  try {
+  try { // Create a new todo with the default completed: false and todo: New Todo
     const newTodo = await databases.createDocument(
       process.env.NEXT_DATABASE_ID!,
       $id, // user id === collection id
@@ -70,10 +70,10 @@ export async function PUT(request: NextRequest) {
   const requestBody = await request.json()
   const {id, collectionId, todoText, isCompleted} = requestBody
 
-  try {
+  try { // update selected document with new values of completed and todo
     const updatedTodo = databases.updateDocument(
       process.env.NEXT_DATABASE_ID!,
-      collectionId,
+      collectionId, // collection id === user id
       id,
       {
         completed: isCompleted,
@@ -103,11 +103,12 @@ export async function DELETE(request: NextRequest) {
 
   try {
     // make sure id and collectionid are non null values
+    // honestly just here to get type script to leave me alone
     if (id === null || collectionId === null) {throw new Error("Id and CollectionId must be non-null")}
 
     const deleteDocument = await databases.deleteDocument(
       process.env.NEXT_DATABASE_ID!,
-      collectionId,
+      collectionId, // collection id === user id
       id
     )
 
