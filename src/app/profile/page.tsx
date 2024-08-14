@@ -34,6 +34,11 @@ export default function HomePage() {
     getLoggedInUser()
   }, [])
 
+  // push the user to correct page from settings dropdown
+  const navigateSettings = (destination: string) => {
+    if (destination === 'edit profile') {router.push('/profile/edit')}
+  }
+
   return (
     <div className="min-h-screen flex flex-col justify-center items-center bg-background">
       <Card className="max-w-[600px]">
@@ -61,7 +66,7 @@ export default function HomePage() {
             <DropdownMenu aria-label="Static Actions">
               <DropdownItem key="new">Verify Email</DropdownItem>
               <DropdownItem key="copy">Verify Phone</DropdownItem>
-              <DropdownItem key="edit">Change Password</DropdownItem>
+              <DropdownItem key="edit" onClick={() => navigateSettings('edit profile')}>Edit Profile</DropdownItem>
               <DropdownItem key="delete" className="text-danger" color="danger">
                 Delete Account
               </DropdownItem>
