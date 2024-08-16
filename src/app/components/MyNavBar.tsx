@@ -91,7 +91,8 @@ export default function MyNavbar() {
                 isBlurred
                 isZoomed
                 width={70}
-                src='./shyguy.png'
+                loading="eager"
+                src='/shyguy.png'
                 alt='Shy Guy Icon'
                 className="hover:cursor-pointer"
               />

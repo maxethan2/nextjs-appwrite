@@ -23,7 +23,7 @@ export default function Home() {
       <Card className='bg-content1 max-w-[400px]' isBlurred={true}>
         <CardHeader>
           <h1 className="text-xl">Welcome to my Appwrite Project</h1>
-          <Image  src="./Appwrite.png" width={50} className="ml-3"/>
+          <Image  src="/Appwrite.png" width={50} className="ml-3" loading="eager"/>
         </CardHeader>
         <Divider />
         <CardBody>
@@ -49,7 +49,8 @@ export default function Home() {
           <Image 
             removeWrapper
             alt='Todo List Card Background'
-            src="./todo-list.jpg"
+            src="/todo-list.jpg"
+            loading="lazy"
             // width={350}
             className="z-0 w-full h-full object-cover"
           />
@@ -80,7 +81,8 @@ export default function Home() {
           <Image 
             removeWrapper
             alt='Todo List Card Background'
-            src="./question-mark.jpg"
+            src="/question-mark.jpg"
+            loading="lazy"
             // width={350}
             className="z-0 w-full h-full object-cover"
           />

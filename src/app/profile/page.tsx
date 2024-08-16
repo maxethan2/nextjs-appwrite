@@ -7,7 +7,7 @@ import Link from "next/link";
 import {Card, CardHeader, CardBody, CardFooter, Divider, Image, Skeleton, Button,
   Dropdown, DropdownTrigger, DropdownMenu, DropdownSection, DropdownItem} from "@nextui-org/react";
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-
+import toast from "react-hot-toast";
 
 export default function HomePage() {
   const router = useRouter()
@@ -39,12 +39,32 @@ export default function HomePage() {
     if (destination === 'edit profile') {router.push('/profile/edit')}
   }
 
+  const verifyEmail = async () => {
+    try{
+      const response = await axios.post('/api/users/verifyEmail')
+      toast.success("Email Verification Has Been Sent To Your Email", 
+        {
+          style: {
+            borderRadius: '10px',
+            background: '#333',
+            color: '#fff'
+          }
+        }
+      )
+    }
+    catch (error: any) {
+      toast.error(`Failed to verify email.\n${error.response.data.error.type}`)
+    }
+  }
+
   return (
     <div className="min-h-screen flex flex-col justify-center items-center bg-background">
       <Card className="max-w-[600px]">
         <CardHeader className="flex flex-row gap-3">
           <Image 
-            src='./shyguy.png'
+            alt="Profile Picture"
+            loading="eager"
+            src='/shyguy.png'
           />
           <Skeleton isLoaded={isLoaded} className='rounded-lg'>
             <div>
@@ -64,7 +84,7 @@ export default function HomePage() {
               </Button>
             </DropdownTrigger>
             <DropdownMenu aria-label="Static Actions">
-              <DropdownItem key="new">Verify Email</DropdownItem>
+              <DropdownItem key="new" onClick={verifyEmail}>Verify Email</DropdownItem>
               <DropdownItem key="copy">Verify Phone</DropdownItem>
               <DropdownItem key="edit" onClick={() => navigateSettings('edit profile')}>Edit Profile</DropdownItem>
               <DropdownItem key="delete" className="text-danger" color="danger">

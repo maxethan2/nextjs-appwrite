@@ -30,6 +30,11 @@ export function middleware(request: NextRequest) {
 
   const token = request.cookies.get('my-custom-session')?.value || ''
 
+  // Ignore the middleware for /profile/verifyEmail
+  if (path.startsWith('/profile/verifyEmail')) {
+    return NextResponse.next();
+  }
+
   // accessing public path and you are logged in
   if (isPublicPath && token != '') {
     return NextResponse.redirect(new URL('/profile', request.url))
@@ -42,6 +47,8 @@ export function middleware(request: NextRequest) {
   // if (isApiPath && !token && !isApiAuthPath) {
   //   return new NextResponse('Unauthorized', { status: 403 });
   // }
+
+
 }
 
 export const config = {
