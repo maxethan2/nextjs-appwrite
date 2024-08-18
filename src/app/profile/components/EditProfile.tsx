@@ -3,18 +3,33 @@ import {Card, CardHeader, CardBody, Input, Divider, Button} from "@nextui-org/re
 
 import { updateName, updatePassword } from "@/app/actions/profile";
 import { useState } from "react";
+import axios from "axios";
 import toast from "react-hot-toast";
 
 export default function EditProfile() {
   const [newName, setNewName] = useState('')
   const [password, setPassword] = useState({old: "", new: ""})
 
-  const handleFileUpload = () => {
+  // handle uploading of profile photo to appwrite storage
+  const handleFileUpload = async () => {
     const fileInput = document.getElementById('uploader') as HTMLInputElement
     const file = fileInput.files![0]
+
+    var formData = new FormData();
+    formData.append("image", file)
     
     if (file) {
-      console.log(file)
+      try {
+        const response = await axios.put('/api/users/profilePhoto', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        })
+        console.log(response)
+      }
+      catch (error: any) {
+        console.log(error)
+      }
     }
     else {
       toast.error('No File Selected')
