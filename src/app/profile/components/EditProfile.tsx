@@ -3,24 +3,40 @@ import {Card, CardHeader, CardBody, Input, Divider, Button} from "@nextui-org/re
 
 import { updateName, updatePassword } from "@/app/actions/profile";
 import { useState } from "react";
+import toast from "react-hot-toast";
 
-export default function EditPage() {
+export default function EditProfile() {
   const [newName, setNewName] = useState('')
   const [password, setPassword] = useState({old: "", new: ""})
 
+  const handleFileUpload = () => {
+    const fileInput = document.getElementById('uploader') as HTMLInputElement
+    const file = fileInput.files![0]
+    
+    if (file) {
+      console.log(file)
+    }
+    else {
+      toast.error('No File Selected')
+    }
+  }
+
   return (
     // [background:radial-gradient(125%_125%_at_50%_10%,#000_40%,#f31260_100%)]
-    <div className="min-h-screen flex flex-col justify-center bg-background
-    absolute inset-0 -z-10 h-full w-full items-center px-5 py-24
-    bg-[radial-gradient(circle,_var(--tw-gradient-stops))] from-default-50 from-10% to-danger-200 to-65% text-default-800">
+    <div 
+    //   className="min-h-screen flex flex-col justify-center bg-background
+    // absolute inset-0 -z-10 h-full w-full items-center px-5 py-24
+    // bg-[radial-gradient(circle,_var(--tw-gradient-stops))] from-default-50 from-10% to-danger-200 to-65% text-default-800"
+      className=""
+      >
       <Card
         isBlurred={true}
         className='border-danger-200 border-1'
       >
-        <CardHeader>
+        {/* <CardHeader>
           <h1 className="text-3xl font-bold">Edit Your Profile Information</h1>
         </CardHeader>
-        <Divider className="bg-danger-500"/>
+        <Divider className="bg-danger-500"/> */}
         <CardBody className="flex flex-col items-center justify-center">
           <h1>Edit Profile Name</h1>
           <form action={() => updateName(newName)} className="flex flex-row items-center">
@@ -73,6 +89,21 @@ export default function EditPage() {
               // onClick={() => updateName(newName)}
             >Update</Button>
           </form>
+
+          <Divider className="mt-3 bg-danger-500"/>
+          <h1 className="my-3">Update Profile Photo</h1>
+          <div className="flex flex-row">
+            <Input type="file" id="uploader" accept=".png, .jpg"/>
+            <Button 
+                color="danger"
+                variant="shadow"
+                className="ml-3"
+                // type='submit'
+                onPress={handleFileUpload}
+            >Update</Button>
+          </div>
+          
+
         </CardBody>
       </Card>
     </div>

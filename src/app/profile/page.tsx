@@ -1,18 +1,22 @@
 'use client'
-import { Suspense, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
-import { CircularProgress } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
-import {Card, CardHeader, CardBody, CardFooter, Divider, Image, Skeleton, Button,
-  Dropdown, DropdownTrigger, DropdownMenu, DropdownSection, DropdownItem} from "@nextui-org/react";
+import {
+  Card, CardHeader, CardBody, CardFooter, Divider, Image, Skeleton, Button,
+  Dropdown, DropdownTrigger, DropdownMenu, DropdownSection, DropdownItem,
+  Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure
+} from "@nextui-org/react";
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import toast from "react-hot-toast";
+import EditProfile from "./components/EditProfile";
 
 export default function HomePage() {
   const router = useRouter()
   const [user, setUser] = useState<User | null>(null)
   const [isLoaded, setIsLoaded] = useState(true)
+  // states for the modal element
+  const {isOpen, onOpen, onOpenChange} = useDisclosure();
 
   // fetch the logged in user on load once
   useEffect(() => {
@@ -34,11 +38,6 @@ export default function HomePage() {
     getLoggedInUser()
   }, [])
 
-  // push the user to correct page from settings dropdown
-  const navigateSettings = (destination: string) => {
-    if (destination === 'edit profile') {router.push('/profile/edit')}
-  }
-
   const verifyEmail = async () => {
     try{
       const response = await axios.post('/api/users/verifyEmail')
@@ -58,7 +57,9 @@ export default function HomePage() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col justify-center items-center bg-background">
+    <div className="min-h-screen flex flex-col justify-center bg-background
+    absolute inset-0 -z-10 h-full w-full items-center px-5 py-24
+    bg-[radial-gradient(circle,_var(--tw-gradient-stops))] from-default-50 from-10% to-danger-200 to-65% text-default-800">
       <Card className="max-w-[600px]">
         <CardHeader className="flex flex-row gap-3">
           <Image 
@@ -84,15 +85,43 @@ export default function HomePage() {
               </Button>
             </DropdownTrigger>
             <DropdownMenu aria-label="Static Actions">
-              <DropdownItem key="new" onClick={verifyEmail}>Verify Email</DropdownItem>
+              <DropdownItem key="new" onPress={verifyEmail}>Verify Email</DropdownItem>
               <DropdownItem key="copy">Verify Phone</DropdownItem>
-              <DropdownItem key="edit" onClick={() => navigateSettings('edit profile')}>Edit Profile</DropdownItem>
+              <DropdownItem key="edit" onPress={onOpen}>Edit Profile</DropdownItem>
               <DropdownItem key="delete" className="text-danger" color="danger">
                 Delete Account
               </DropdownItem>
             </DropdownMenu>
           </Dropdown>
         </CardHeader>
+
+        {/* modal element */}
+        <Modal 
+          isOpen={isOpen} 
+          onOpenChange={onOpenChange} 
+          isDismissable={false} 
+          isKeyboardDismissDisabled={true}
+          backdrop="opaque"
+          classNames={{
+            backdrop: "bg-gradient-to-t from-danger-400/50 to-zinc-900/10 backdrop-opacity-20"
+          }}  
+        >
+          <ModalContent>
+            {(onClose) => (
+              <>
+                <ModalHeader className="flex flex-col m-auto">Edit Profile</ModalHeader>
+
+                <ModalBody>
+                  <EditProfile />
+                </ModalBody>
+
+                <ModalFooter>
+                  <Button color="danger" variant="shadow" onPress={onClose}>Close</Button>
+                </ModalFooter>
+              </>
+            )}
+          </ModalContent>
+        </Modal>
       </Card>
 
 
