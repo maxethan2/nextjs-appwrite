@@ -11,6 +11,20 @@ export default function EditProfile() {
   const [password, setPassword] = useState({old: "", new: ""})
 
   // handle uploading of profile photo to appwrite storage
+
+  /*
+    const {data} = await axios.post('https://httpbin.org/post', {
+    firstName: 'Fred',
+    lastName: 'Flintstone',
+    orders: [1, 2, 3],
+    photo: document.querySelector('#fileInput').files
+  }, {
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    }
+  }
+)
+  */
   const handleFileUpload = async () => {
     const fileInput = document.getElementById('uploader') as HTMLInputElement
     const file = fileInput.files![0]
