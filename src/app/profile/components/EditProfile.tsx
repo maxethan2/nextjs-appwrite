@@ -1,7 +1,7 @@
 'use client'
 import {Card, CardHeader, CardBody, Input, Divider, Button} from "@nextui-org/react";
 
-import { updateName, updatePassword } from "@/app/actions/profile";
+import { updateName, updatePassword, updateProfile } from "@/app/actions/profile";
 import { useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
@@ -24,12 +24,10 @@ export default function EditProfile() {
     }
   }
 )
-  */
-  const handleFileUpload = async () => {
-    const fileInput = document.getElementById('uploader') as HTMLInputElement
-    const file = fileInput.files![0]
 
-    var formData = new FormData();
+
+
+      var formData = new FormData();
     formData.append("image", file)
     
     if (file) {
@@ -46,8 +44,18 @@ export default function EditProfile() {
       }
     }
     else {
-      toast.error('No File Selected')
+      toast.error('No zFile Selected')
     }
+  */
+  const handleFileUpload = async () => {
+    const fileInput = document.getElementById('uploader') as HTMLInputElement
+    const file = fileInput.files![0]
+
+    var formData = new FormData();
+    formData.append("image", file)
+
+    const response = await updateProfile(formData)
+    console.log(response)
   }
 
   return (
