@@ -45,7 +45,7 @@ export async function updatePassword(newPassword: string, oldPassword: string) {
   }
 }
 
-export async function updateProfile(form: FormData) {
+export async function updateProfilePhoto(form: FormData) {
   // ensure that user is logged in
   var user
   try {
@@ -62,24 +62,44 @@ export async function updateProfile(form: FormData) {
   .setKey(process.env.NEXT_APPWRITE_KEY!)
   
   const storage = new Storage(client)
-
   const file = form.get('image') as File
 
   // check if user already has a profile photo
+  try {
+    const response = await storage.getFile(
+      process.env.NEXT_PROFILE_STORAGE_ID!,
+      user.$id)
 
+      // profile photo already exists
+      // delete profile photo then create new profile photo
+      const deleteResponse = await storage.deleteFile(
+        process.env.NEXT_PROFILE_STORAGE_ID!,
+        user.$id
+      )
 
+      const createResponse = createNewProfilePhoto(storage, user, file)
+      return createResponse
+  }
+  catch (error: any) {
+    // if error is storage_file_not_found
+    // create new file
+    const response = await createNewProfilePhoto(storage, user, file)
+    // return response.message = "Profile Photo Updated Sucessfully"
+  }
+}
 
-  // if they dont create a new file
+async function createNewProfilePhoto(storage: Storage, user: User, file: File) {
+
   try{
     const storageResponse = await storage.createFile(
       process.env.NEXT_PROFILE_STORAGE_ID!, // bucket id
       user.$id, // photo id === user id
       file
     )
-    return {message: "Profile Photo Uploaded Sucessfully.", response: storageResponse}
+    return {message: "Profile Photo Uploaded Sucessfully.", response: storageResponse, status: 200}
   }
   catch (error: any) {
     const errorResponse = JSON.stringify(error)
-    return {message: "Error uploading Profile Photo", error: errorResponse}
+    return {message: "Error uploading Profile Photo", response: errorResponse, status: 400}
   }
 }

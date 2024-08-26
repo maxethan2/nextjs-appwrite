@@ -1,7 +1,7 @@
 'use client'
 import {Card, CardHeader, CardBody, Input, Divider, Button} from "@nextui-org/react";
 
-import { updateName, updatePassword, updateProfile } from "@/app/actions/profile";
+import { updateName, updatePassword, updateProfilePhoto } from "@/app/actions/profile";
 import { useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
@@ -51,11 +51,29 @@ export default function EditProfile() {
     const fileInput = document.getElementById('uploader') as HTMLInputElement
     const file = fileInput.files![0]
 
-    var formData = new FormData();
-    formData.append("image", file)
+    if (file) {
+      var formData = new FormData();
+      formData.append("image", file)
 
-    const response = await updateProfile(formData)
-    console.log(response)
+      // define a type to avoid type script error
+      // not sure why its getting mad
+      type responseType = {
+        message: string,
+        response: any
+        status: number,
+      }
+      const response = await updateProfilePhoto(formData) as responseType
+
+      if (response?.status == 200){
+        toast.success(response.message)
+      }
+      else {
+        toast.error(response?.message)
+      }
+    }
+    else {
+      toast.error("No File Selected")
+    }
   }
 
   return (
