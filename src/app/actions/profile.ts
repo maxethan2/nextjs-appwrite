@@ -1,7 +1,7 @@
 'use server'
 import { cookies } from "next/headers"
 import { createSessionClient } from "@/lib/server/appwrite"
-import { Client, Storage, ID } from "node-appwrite"
+import { Client, Storage, ID, ImageFormat } from "node-appwrite"
 import axios from "axios"
 
 // update name server action
@@ -81,7 +81,7 @@ export async function updateProfilePhoto(form: FormData) {
       return createResponse
   }
   catch (error: any) {
-    // if error is storage_file_not_found
+    // if error is storage_file_not_found meaning that there is no profile photo
     // create new file
     const response = await createNewProfilePhoto(storage, user, file)
     // return response.message = "Profile Photo Updated Sucessfully"
@@ -89,7 +89,7 @@ export async function updateProfilePhoto(form: FormData) {
 }
 
 async function createNewProfilePhoto(storage: Storage, user: User, file: File) {
-
+  // create a new profile photo inside the bucket and the file id is the same as the users id
   try{
     const storageResponse = await storage.createFile(
       process.env.NEXT_PROFILE_STORAGE_ID!, // bucket id

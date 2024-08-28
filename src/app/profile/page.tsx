@@ -15,8 +15,9 @@ export default function HomePage() {
   const router = useRouter()
   const [user, setUser] = useState<User | null>(null)
   const [isLoaded, setIsLoaded] = useState(true)
+  const [imageUrl, setImageUrl] = useState<string>("")
   // states for the modal element
-  const {isOpen, onOpen, onOpenChange} = useDisclosure();
+  const {isOpen, onOpen, onOpenChange} = useDisclosure()
 
   // fetch the logged in user on load once
   useEffect(() => {
@@ -56,17 +57,28 @@ export default function HomePage() {
     }
   }
 
+
+  const testPhoto = async () => {
+    try{
+      const response = await axios.get('api/users/profilePhoto')
+      const imageUrl: string = response.data.imageUrl
+      setImageUrl(imageUrl)
+    }
+    catch (error: any){
+    }
+  }
+
   return (
     <div className="min-h-screen flex flex-col justify-center bg-background
     absolute inset-0 -z-10 h-full w-full items-center px-5 py-24
     bg-[radial-gradient(circle,_var(--tw-gradient-stops))] from-default-50 from-10% to-danger-200 to-65% text-default-800">
       <Card className="max-w-[600px]">
         <CardHeader className="flex flex-row gap-3">
-          <Image 
+          {/* <Image 
             alt="Profile Picture"
             loading="eager"
             src='/shyguy.png'
-          />
+          /> */}
           <Skeleton isLoaded={isLoaded} className='rounded-lg'>
             <div>
               <h1>{user?.name}</h1>
@@ -169,6 +181,10 @@ export default function HomePage() {
             </Button>
           </CardFooter>
         </Card>
+        <div>
+          <Button onPress={testPhoto}>Press</Button>
+          <Image src={imageUrl} alt="Profile Photo" width={100} height={100}/>
+        </div>
       </div>
     </div>
   );
