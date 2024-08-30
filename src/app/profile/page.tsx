@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useState } from "react";
+import { use, useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import {
@@ -10,6 +10,7 @@ import {
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import toast from "react-hot-toast";
 import EditProfile from "./components/EditProfile";
+import { useUserState } from "@/lib/server/state-management/state";
 
 export default function HomePage() {
   const router = useRouter()
@@ -18,6 +19,9 @@ export default function HomePage() {
   const [imageUrl, setImageUrl] = useState<string>("")
   // states for the modal element
   const {isOpen, onOpen, onOpenChange} = useDisclosure()
+
+  // zustand state management
+  const userProfilePicUrl = useUserState((state) => state.profilePicUrl)
 
   // fetch the logged in user on load once
   useEffect(() => {
@@ -63,8 +67,10 @@ export default function HomePage() {
       const response = await axios.get('api/users/profilePhoto')
       const imageUrl: string = response.data.imageUrl
       setImageUrl(imageUrl)
+      useUserState.setState({profilePicUrl: imageUrl})
     }
     catch (error: any){
+      toast.error(error)
     }
   }
 
@@ -74,11 +80,11 @@ export default function HomePage() {
     bg-[radial-gradient(circle,_var(--tw-gradient-stops))] from-default-50 from-10% to-danger-200 to-65% text-default-800">
       <Card className="max-w-[600px]">
         <CardHeader className="flex flex-row gap-3">
-          {/* <Image 
+          <Image 
             alt="Profile Picture"
             loading="eager"
-            src='/shyguy.png'
-          /> */}
+            src={userProfilePicUrl}
+          />
           <Skeleton isLoaded={isLoaded} className='rounded-lg'>
             <div>
               <h1>{user?.name}</h1>

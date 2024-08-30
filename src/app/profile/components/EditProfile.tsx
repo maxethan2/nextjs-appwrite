@@ -5,48 +5,16 @@ import { updateName, updatePassword, updateProfilePhoto } from "@/app/actions/pr
 import { useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { useUserState } from "@/lib/server/state-management/state";
 
 export default function EditProfile() {
   const [newName, setNewName] = useState('')
   const [password, setPassword] = useState({old: "", new: ""})
 
+    // zustand state management
+    const userProfilePicUrl = useUserState((state) => state.profilePicUrl)
+
   // handle uploading of profile photo to appwrite storage
-
-  /*
-    const {data} = await axios.post('https://httpbin.org/post', {
-    firstName: 'Fred',
-    lastName: 'Flintstone',
-    orders: [1, 2, 3],
-    photo: document.querySelector('#fileInput').files
-  }, {
-    headers: {
-      'Content-Type': 'multipart/form-data'
-    }
-  }
-)
-
-
-
-      var formData = new FormData();
-    formData.append("image", file)
-    
-    if (file) {
-      try {
-        const response = await axios.put('/api/users/profilePhoto', formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data'
-          }
-        })
-        console.log(response)
-      }
-      catch (error: any) {
-        console.log(error)
-      }
-    }
-    else {
-      toast.error('No zFile Selected')
-    }
-  */
   const handleFileUpload = async () => {
     const fileInput = document.getElementById('uploader') as HTMLInputElement
     const file = fileInput.files![0]
@@ -64,9 +32,27 @@ export default function EditProfile() {
       }
       const response = await updateProfilePhoto(formData) as responseType
 
+      // appwrite photo upload was successfull
       if (response?.status == 200){
         toast.success(response.message)
+
+        // try to then update the global state 
+        // WORK IN PROGRESS ---------------------------------
+        // currently i am refetching the data from appwrite even though i have the 
+        // data already. 
+        try{
+          const response = await axios.get('api/users/profilePhoto')
+          const imageUrl: string = response.data.imageUrl
+          useUserState.setState({profilePicUrl: imageUrl})
+        }
+        // catch error with updating state
+        // should really get of this and not fetch the profile picture data
+        catch (error: any){
+          toast.error(error)
+        }
       }
+      // error with uploading data to appwrite
+      // is an if/else because of server actions
       else {
         toast.error(response?.message)
       }
@@ -76,7 +62,7 @@ export default function EditProfile() {
     }
   }
 
-  
+
 
   return (
     // [background:radial-gradient(125%_125%_at_50%_10%,#000_40%,#f31260_100%)]
