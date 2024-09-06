@@ -2,6 +2,8 @@
 import { use, useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import { useUserState } from "@/lib/server/state-management/state";
+
 import {
   Card, CardHeader, CardBody, CardFooter, Divider, Image, Skeleton, Button,
   Dropdown, DropdownTrigger, DropdownMenu, DropdownSection, DropdownItem,
@@ -10,13 +12,11 @@ import {
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import toast from "react-hot-toast";
 import EditProfile from "./components/EditProfile";
-import { useUserState } from "@/lib/server/state-management/state";
 
 export default function HomePage() {
   const router = useRouter()
   const [user, setUser] = useState<User | null>(null)
   const [isLoaded, setIsLoaded] = useState(true)
-  const [imageUrl, setImageUrl] = useState<string>("")
   // states for the modal element
   const {isOpen, onOpen, onOpenChange} = useDisclosure()
 
@@ -31,6 +31,14 @@ export default function HomePage() {
 
         const response = await axios.get('/api/users/loggedInUser')
         setUser(response.data.user)
+        useUserState.setState({name: response.data.user.name, email: response.data.user.email})
+
+        // fetch the user profile photo if it hasnt been fetched already
+        // 
+        if (userProfilePicUrl == ''){
+          const response = await axios.get('api/users/profilePhoto')
+          useUserState.setState({profilePicUrl: response.data.imageUrl})
+        }
       }
       catch (error: any) {
         console.log(error.message)
@@ -61,19 +69,6 @@ export default function HomePage() {
     }
   }
 
-
-  const testPhoto = async () => {
-    try{
-      const response = await axios.get('api/users/profilePhoto')
-      const imageUrl: string = response.data.imageUrl
-      setImageUrl(imageUrl)
-      useUserState.setState({profilePicUrl: imageUrl})
-    }
-    catch (error: any){
-      toast.error(error)
-    }
-  }
-
   return (
     <div className="min-h-screen flex flex-col justify-center bg-background
     absolute inset-0 -z-10 h-full w-full items-center px-5 py-24
@@ -84,6 +79,7 @@ export default function HomePage() {
             alt="Profile Picture"
             loading="eager"
             src={userProfilePicUrl}
+            width={100}
           />
           <Skeleton isLoaded={isLoaded} className='rounded-lg'>
             <div>
@@ -187,10 +183,6 @@ export default function HomePage() {
             </Button>
           </CardFooter>
         </Card>
-        <div>
-          <Button onPress={testPhoto}>Press</Button>
-          <Image src={imageUrl} alt="Profile Photo" width={100} height={100}/>
-        </div>
       </div>
     </div>
   );

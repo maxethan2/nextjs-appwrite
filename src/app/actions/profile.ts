@@ -2,6 +2,7 @@
 import { cookies } from "next/headers"
 import { createSessionClient } from "@/lib/server/appwrite"
 import { Client, Storage, ID, ImageFormat } from "node-appwrite"
+import { useUserState } from "@/lib/server/state-management/state";
 import axios from "axios"
 
 // update name server action
@@ -88,7 +89,7 @@ export async function updateProfilePhoto(form: FormData) {
   }
 }
 
-async function createNewProfilePhoto(storage: Storage, user: User, file: File) {
+export async function createNewProfilePhoto(storage: Storage, user: User, file: File) {
   // create a new profile photo inside the bucket and the file id is the same as the users id
   try{
     const storageResponse = await storage.createFile(
