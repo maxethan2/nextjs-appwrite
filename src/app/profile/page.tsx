@@ -15,7 +15,7 @@ import EditProfile from "./components/EditProfile";
 
 export default function HomePage() {
   const router = useRouter()
-  const [user, setUser] = useState<User | null>(null)
+  const [user, setUser] = useState<User>(useUserState((state) => state.user))
   const [isLoaded, setIsLoaded] = useState(true)
   // states for the modal element
   const {isOpen, onOpen, onOpenChange} = useDisclosure()
@@ -26,12 +26,14 @@ export default function HomePage() {
   // fetch the logged in user on load once
   useEffect(() => {
     const getLoggedInUser = async () => {
-      try {
+      fetchData: try {
+        // if user data is already fetched dont fetch again
+        if (user.$id != "none") break fetchData
+        
         setIsLoaded(false)
-
         const response = await axios.get('/api/users/loggedInUser')
         setUser(response.data.user)
-        useUserState.setState({name: response.data.user.name, email: response.data.user.email})
+        useUserState.setState({user: response.data.user})
 
         // fetch the user profile photo if it hasnt been fetched already
         // 

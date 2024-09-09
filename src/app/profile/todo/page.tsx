@@ -9,11 +9,12 @@ import { Button } from "@nextui-org/react"
 import {Card, CardHeader, CardBody, CardFooter, Link, Image} from "@nextui-org/react";
 import AddIcon from '@mui/icons-material/Add';
 import toast, {Toaster} from "react-hot-toast"
+import { useUserState, useTodoListState } from "@/lib/server/state-management/state"
 
 export default function ToDoPage() {
   const router = useRouter()
-  const [user, setUser] = useState<User | null>(null)
-  const [todoList, setTodoList] = useState<Todo[] | null>(null)
+  const [user, setUser] = useState<User>(useUserState((state) => state.user))
+  const [todoList, setTodoList] = useState<Todo[] | null>(useTodoListState((state) => state.todoList))
   const [loading, setLoading] = useState(false)
   const [todoListExists, setTodoListExists] = useState(true)
 
@@ -21,9 +22,32 @@ export default function ToDoPage() {
   useEffect(() => {
     getLoggedInUser()
   }, [])
-  // set user and todoList
+
+  // fetch and set todo list
+  const getTodoList = async () => {
+    fetchData: try {
+      // if todo list is already fetched
+      if (todoList != null) break fetchData
+        // Fetch todo data for the user
+        const todoResponse = await axios.get('/api/users/todoList', { params: { userID: user.$id } })
+        setTodoList(todoResponse.data.todoList.documents)
+    }
+    catch (error: any) {
+      console.log(error)
+      console.log(user.$id)
+    }
+  }
+
+  // fetch and set user
   const getLoggedInUser = async () => {
-    try {
+    fetchData: try {
+      // if user data is already fetched dont fetch again
+      if (user.$id != "none") {
+        // check to see if todo list needs to be fetched
+        getTodoList()
+        break fetchData
+      }
+
       setLoading(true)
       // get user
       const userResponse = await axios.get('/api/users/loggedInUser')
@@ -32,8 +56,7 @@ export default function ToDoPage() {
       // get todo data of user
       if (fetchedUser) {
         // Fetch todo data for the user
-        const todoResponse = await axios.get('/api/users/todoList', { params: { userID: fetchedUser.$id } })
-        setTodoList(todoResponse.data.todoList.documents)
+        getTodoList()
       }
     }
     catch (error: any) {

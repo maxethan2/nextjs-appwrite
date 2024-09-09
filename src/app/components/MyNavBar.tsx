@@ -15,6 +15,7 @@ import { useEffect, useState } from "react";
 import { ThemeSwitcher } from "./ThemeSwitcher";
 import { useRouter, usePathname } from "next/navigation"; 
 import Link from "next/link";
+import { useUserState } from "@/lib/server/state-management/state";
 
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
@@ -25,7 +26,8 @@ import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
 export default function MyNavbar() {
   const router = useRouter()
   const pathname = usePathname()
-  const [user, setUser] = useState<User | null>(null)
+  const [user, setUser] = useState<User>(useUserState((state) => state.user))
+  const userProfilePicUrl = useUserState((state) => state.profilePicUrl)
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -36,13 +38,22 @@ export default function MyNavbar() {
 
   useEffect(() => {
     const getLoggedInUser = async () => {
-      try {
+      fetchData: try {
+        // if user data is already fetched then dont fetch again
+        if (user.$id != 'none') break fetchData
+
         const response = await axios.get('/api/users/loggedInUser')
         setUser(response.data.user)
+
+        // fetch the user profile photo if it hasnt been fetched already
+        // 
+        if (userProfilePicUrl == ''){
+          const response = await axios.get('api/users/profilePhoto')
+          useUserState.setState({profilePicUrl: response.data.imageUrl})
+        }
       }
       catch (error: any) {
         console.log(error.message)
-        setUser(null)
       }
     }
     getLoggedInUser()
@@ -131,7 +142,7 @@ export default function MyNavbar() {
               }}
             >
               <DropdownItem
-                key='autoscalling'
+                key='profile'
                 description="Your personal profile where you can manage your account and data."
                 startContent={<AccountCircleIcon className="text-danger-400" fontSize="large"/>}
                 onClick={() => router.push('/profile')}
@@ -139,7 +150,7 @@ export default function MyNavbar() {
                 Profile
               </DropdownItem>
               <DropdownItem
-                key='autoscalling'
+                key='todo list'
                 description="Specific Todo List for you to keep track of all your ideas."
                 startContent={<FormatListBulletedIcon className="text-danger-400" fontSize="large"/>}
                 onClick={() => router.push('/profile/todo')}
