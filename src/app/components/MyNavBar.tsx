@@ -57,7 +57,7 @@ export default function MyNavbar() {
       }
     }
     getLoggedInUser()
-  }, [pathname])
+  }, [pathname, user.$id, userProfilePicUrl])
 
   const handleButtonClick = async () => {
     // if a user exists handle signout function

@@ -20,67 +20,71 @@ export default function ToDoPage() {
 
   // set user and todoList on load
   useEffect(() => {
-    getLoggedInUser()
-  }, [])
+    // fetch and set user
+    const getLoggedInUser = async () => {
+      fetchData: try {
+        // if user data is already fetched dont fetch again
+        if (user.$id != "none") {
+          // check to see if todo list needs to be fetched
+          getTodoList(user)
+          break fetchData
+        }
+        
+        setLoading(true)
+        // get user
+        const userResponse = await axios.get('/api/users/loggedInUser')
+        const fetchedUser: User = userResponse.data.user
+        setUser(fetchedUser)
+        // get todo data of user
+        if (fetchedUser) {
+          // Fetch todo data for the user
+          getTodoList(fetchedUser)
+        }
+      }
+      catch (error: any) {
+        console.log(error.message)
+        // setUser(null)
+        setTodoListExists(false)
+      }
+      finally {
+        setLoading(false)
+      }
+    }
 
-  // fetch and set todo list
-  const getTodoList = async () => {
-    fetchData: try {
-      // if todo list is already fetched
-      if (todoList != null) break fetchData
+      // fetch and set todo list
+    const getTodoList = async (user: User) => {
+      fetchData: try {
+        // if todo list is already fetched
+        console.log('hello', todoList)
+        if (todoList != null) {break fetchData}
+
         // Fetch todo data for the user
         const todoResponse = await axios.get('/api/users/todoList', { params: { userID: user.$id } })
         setTodoList(todoResponse.data.todoList.documents)
-    }
-    catch (error: any) {
-      console.log(error)
-      console.log(user.$id)
-    }
-  }
-
-  // fetch and set user
-  const getLoggedInUser = async () => {
-    fetchData: try {
-      // if user data is already fetched dont fetch again
-      if (user.$id != "none") {
-        // check to see if todo list needs to be fetched
-        getTodoList()
-        break fetchData
+        // set todo list in state
+        useTodoListState.setState({todoList: todoResponse.data.todoList.documents})
       }
-
-      setLoading(true)
-      // get user
-      const userResponse = await axios.get('/api/users/loggedInUser')
-      const fetchedUser: User = userResponse.data.user
-      setUser(fetchedUser)
-      // get todo data of user
-      if (fetchedUser) {
-        // Fetch todo data for the user
-        getTodoList()
-      }
-    }
-    catch (error: any) {
-      console.log(error.message)
-      // setUser(null)
-      setTodoListExists(false)
-    }
-    finally {
-      setLoading(false)
-    }
-  }
-
-  // create a todolist collection document and attributes if the user is new and doesnt have one yet
-  const createTodoList = async () => {
-    if (user) {
-      try {
-        const response = await axios.post('/api/users/todoList/create', user)
-        console.log(response)
-      }
-      catch (error: any){
+      catch (error: any) {
         console.log(error)
       }
     }
-  }
+    getLoggedInUser()
+  }, [user, todoList])
+
+    // create a todolist collection document and attributes if the user is new and doesnt have one yet
+    const createTodoList = async () => {
+      if (user) {
+        try {
+          const response = await axios.post('/api/users/todoList/create', user)
+          console.log(response)
+        }
+        catch (error: any){
+          console.log(error)
+        }
+      }
+    }
+
+
 
   // take id and collection id from todo component and delete todo from database
   // after databse call works successfully then delete the todo form the local todo array

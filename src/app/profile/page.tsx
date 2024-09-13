@@ -51,7 +51,7 @@ export default function HomePage() {
     }
 
     getLoggedInUser()
-  }, [])
+  }, [user.$id, userProfilePicUrl])
 
   const verifyEmail = async () => {
     try{

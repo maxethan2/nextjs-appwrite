@@ -23,7 +23,12 @@ export default function Home() {
       <Card className='bg-content1 max-w-[400px]' isBlurred={true}>
         <CardHeader>
           <h1 className="text-xl">Welcome to my Appwrite Project</h1>
-          <Image  src="/Appwrite.png" width={50} className="ml-3" loading="eager"/>
+          <Image  
+            src="/Appwrite.png" width={50} 
+            className="ml-3" 
+            loading="eager"
+            alt="Appwrite Logo"
+          />
         </CardHeader>
         <Divider />
         <CardBody>
