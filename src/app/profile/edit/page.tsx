@@ -1,3 +1,27 @@
+// NOT USED 
+// CAN PROBABLY DELETE IDK
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 'use client'
 import {Card, CardHeader, CardBody, Input, Divider, Button} from "@nextui-org/react";
 

@@ -7,6 +7,7 @@ import axios from "axios"
 
 // update name server action
 export async function updateName(newName: string) {
+
   // make sure that user is logged in
   const session = cookies().get('my-custom-session')
   if(!session || !session.value) {

@@ -1,9 +1,11 @@
+import { produce } from 'immer'
 import {create} from 'zustand'
 
 interface UserState {
   profilePicUrl: string,
   user: User,
-  update: (newProfilePic: string) => void
+  // update: (newProfilePic: string) => void
+  updateName: (newName: string) => void
 }
 
 interface TodoListState  {
@@ -30,7 +32,9 @@ export const useUserState = create<UserState>()((set) => ({
     status: false,
     targets: [],
   },
-  update: (newProfilePic) => set({profilePicUrl: newProfilePic})
+  // user immer to update nested state
+  updateName: (newName) => set(produce((state: UserState) => {state.user.name = newName}))
+  // update: (newProfilePic) => set({profilePicUrl: newProfilePic})
 }))
 
 export const useTodoListState = create<TodoListState>()((set) => ({

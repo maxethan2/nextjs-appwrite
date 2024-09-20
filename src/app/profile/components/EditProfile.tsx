@@ -13,6 +13,7 @@ export default function EditProfile() {
 
     // zustand state management
     const userProfilePicUrl = useUserState((state) => state.profilePicUrl)
+    const userState = useUserState((state) => state)
 
   // handle uploading of profile photo to appwrite storage
   const handleFileUpload = async () => {
@@ -62,6 +63,10 @@ export default function EditProfile() {
     }
   }
 
+  const updateNameState = (newName: string) => {
+    setNewName(newName)
+    userState.updateName(newName)
+  }
 
 
   return (
@@ -86,7 +91,7 @@ export default function EditProfile() {
             <Input 
               className="max-w-[200px] ml-3" 
               placeholder="Enter New Name"
-              onChange={(e) => setNewName(e.target.value)}
+              onChange={(e) => updateNameState(e.target.value)}
             />
             <Button 
               color="danger"
