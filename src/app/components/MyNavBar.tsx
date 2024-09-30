@@ -68,8 +68,9 @@ export default function MyNavbar() {
         router.push('/')
       }
       catch (error: any) {
+        console.log(error)
         const errorResponse = `Signout Failed: ${error.response.data.error}`
-        toast.error( errorResponse)
+        toast.error(errorResponse)
       }
     }
     // no user exists so route to signup
@@ -184,7 +185,7 @@ export default function MyNavbar() {
               }}
             >
               <DropdownItem
-                key='autoscalling'
+                key='something1'
                 description="Something will be added here eventually ??omething will be added here eventually ??omething will be added here eventually ??omething will be added here eventually ???"
                 startContent={<QuestionMarkIcon className="text-danger-400" fontSize="large"/>}
                 onClick={() => router.push('/')}
@@ -192,7 +193,7 @@ export default function MyNavbar() {
                 Something
               </DropdownItem>
               <DropdownItem
-                key='autoscalling'
+                key='something2'
                 description="Yea for sure something will be added here in the future"
                 startContent={<QuestionMarkIcon className="text-danger-400" fontSize="large"/>}
                 onClick={() => router.push('/')}
