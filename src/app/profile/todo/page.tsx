@@ -43,7 +43,6 @@ export default function ToDoPage() {
       }
       catch (error: any) {
         console.log(error.message)
-        // setUser(null)
         setTodoListExists(false)
       }
       finally {
@@ -55,7 +54,6 @@ export default function ToDoPage() {
     const getTodoList = async (user: User) => {
       fetchData: try {
         // if todo list is already fetched
-        console.log('hello', todoList)
         if (todoList != null) {break fetchData}
 
         // Fetch todo data for the user
@@ -65,7 +63,8 @@ export default function ToDoPage() {
         useTodoListState.setState({todoList: todoResponse.data.todoList.documents})
       }
       catch (error: any) {
-        console.log(error)
+        console.log("hello" ,error)
+        setTodoListExists(false)
       }
     }
     getLoggedInUser()

@@ -64,7 +64,7 @@ export default function MyNavbar() {
 
   const handleButtonClick = async () => {
     // if a user exists handle signout function
-    if (user) {
+    if (user.$id != 'none') {
       try {
         const response = await axios.get('/api/users/signout')
         toast.success(response.data.message)
