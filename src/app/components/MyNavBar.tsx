@@ -8,7 +8,7 @@ import {
   NavbarMenu,
   NavbarMenuItem
 } from "@nextui-org/navbar";
-import { Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, Image } from "@nextui-org/react";
+import { Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, Image, User } from "@nextui-org/react";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
 import { useEffect, useState } from "react";
@@ -27,6 +27,7 @@ export default function MyNavbar() {
   const router = useRouter()
   const pathname = usePathname()
   const [user, setUser] = useState<User>(useUserState((state) => state.user))
+  const clearUser = useUserState((state) => state.clearUser)
   const userProfilePicUrl = useUserState((state) => state.profilePicUrl)
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -52,8 +53,10 @@ export default function MyNavbar() {
           useUserState.setState({profilePicUrl: response.data.imageUrl})
         }
       }
+      // no user is logged in!!!!
       catch (error: any) {
-        console.log(error.message)
+        // zustand clear user
+        clearUser()
       }
     }
     getLoggedInUser()
@@ -68,7 +71,6 @@ export default function MyNavbar() {
         router.push('/')
       }
       catch (error: any) {
-        console.log(error)
         const errorResponse = `Signout Failed: ${error.response.data.error}`
         toast.error(errorResponse)
       }
@@ -217,7 +219,7 @@ export default function MyNavbar() {
               variant="shadow"
               onClick={handleButtonClick}
             >
-              {user ? "Signout" : "Signup"}
+              {user.$id != 'none' ? "Signout" : "Signup"}
             </Button>
             <ThemeSwitcher />
           </NavbarContent>

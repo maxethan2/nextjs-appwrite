@@ -6,6 +6,7 @@ interface UserState {
   user: User,
   // update: (newProfilePic: string) => void
   updateName: (newName: string) => void
+  clearUser: () => void
 }
 
 interface TodoListState  {
@@ -33,8 +34,28 @@ export const useUserState = create<UserState>()((set) => ({
     targets: [],
   },
   // user immer to update nested state
-  updateName: (newName) => set(produce((state: UserState) => {state.user.name = newName}))
+  updateName: (newName) => set(produce((state: UserState) => {state.user.name = newName})),
   // update: (newProfilePic) => set({profilePicUrl: newProfilePic})
+
+  clearUser: () => set({user: {
+    $id: 'none',
+    $createdAt: 'none',
+    $updatedAt: 'none',
+    accessedAt: 'none',
+    email: 'none',
+    emailVerification: false,
+    labels: [],
+    mfa: false,
+    name: 'none',
+    passwordUpdate: 'none',
+    phone: 'none',
+    phoneVerification: false,
+    prefs: [],
+    registration: 'none',
+    status: false,
+    targets: [],
+  }}),
+
 }))
 
 export const useTodoListState = create<TodoListState>()((set) => ({

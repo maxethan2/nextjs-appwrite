@@ -12,6 +12,6 @@ export async function GET() {
     return NextResponse.json({user: user, success: true})
   }
   catch (error: any) {
-    return NextResponse.json({message: "No User Currently Logged In."}, {status: 400})
+    return NextResponse.json({message: "No User Currently Logged In.", error: error}, {status: 400})
   }
 }
