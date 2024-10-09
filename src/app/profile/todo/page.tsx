@@ -6,7 +6,7 @@ import ToDo from "./components/Todo"
 import { Spinner } from "@nextui-org/react"
 import { useRouter } from "next/navigation"
 import { Button } from "@nextui-org/react"
-import {Card, CardHeader, CardBody, CardFooter, Link, Image} from "@nextui-org/react";
+import {Card, CardHeader, CardBody, CardFooter, Link, Image, ScrollShadow} from "@nextui-org/react";
 import AddIcon from '@mui/icons-material/Add';
 import toast, {Toaster} from "react-hot-toast"
 import { useUserState, useTodoListState } from "@/lib/server/state-management/state"
@@ -19,6 +19,8 @@ export default function ToDoPage() {
   const [todoListExists, setTodoListExists] = useState(true)
 
   // set user and todoList on load
+  // fetch and set todo list and update zustand state when todolist is updated
+  // runs everytime the user is updated or the todoList is updated
   useEffect(() => {
     // fetch and set user
     const getLoggedInUser = async () => {
@@ -50,11 +52,17 @@ export default function ToDoPage() {
       }
     }
 
-      // fetch and set todo list
+    // get todo list if it has not been fetched already
+    // update the global state if the todo list already exists
     const getTodoList = async (user: User) => {
       fetchData: try {
         // if todo list is already fetched
-        if (todoList != null) {break fetchData}
+        if (todoList != null) {
+          // update the zustand state
+          useTodoListState.setState({todoList: todoList})
+          // break out of fetching todolist as it already exists and is up to date
+          break fetchData
+        }
 
         // Fetch todo data for the user
         const todoResponse = await axios.get('/api/users/todoList', { params: { userID: user.$id } })
@@ -131,6 +139,7 @@ export default function ToDoPage() {
       }
     }
     catch (error: any) {
+      // api error
       toast.error(error.response.data.error)
     }
   }
@@ -162,6 +171,8 @@ export default function ToDoPage() {
         todoText: todoText
       })
       toast.success("Updated Todo Item")
+      // set zustand todolist state
+
     }
     catch (error: any) {
       toast.error(error.message)
@@ -171,46 +182,50 @@ export default function ToDoPage() {
   return (
     <>
     <Toaster />
-    <div className="flex flex-col min-h-screen justify-center items-center pt-20 bg-background">
+    <div className="min-h-screen flex flex-col justify-center bg-background
+    absolute inset-0 -z-10 h-full w-full items-center px-5 py-24
+    bg-[radial-gradient(circle,_var(--tw-gradient-stops))] from-default-50 from-10% to-danger-200 to-95% text-default-800">
       {user?.name}&apos;s todo page
-      <Card className="bg-divider flex flex-col justify-center items-center px-12 pb-12">
-        <CardHeader className="flex flex-row">
-          {/* dont render add todolist button if todo list does not exist */}
-          {
-            todoList ?
-            (
-              <div className="flex m-auto">
-                <h1 className="my-auto">Add New Todo</h1>
-                <Button
-                  isIconOnly={true}
-                  variant="shadow"
-                  color="danger"
-                  className="ml-3"
-                  onClick={addTodo}
-                >
-                  <AddIcon />
-                </Button>
+      <Card className="bg-divider flex flex-col justify-center items-center px-12 pb-12 h-5/6">
+        <ScrollShadow className="w-[400px]">
+          <CardHeader className="flex flex-row">
+            {/* dont render add todolist button if todo list does not exist */}
+            {
+              todoList ?
+              (
+                <div className="flex m-auto">
+                  <h1 className="my-auto">Add New Todo</h1>
+                  <Button
+                    isIconOnly={true}
+                    variant="shadow"
+                    color="danger"
+                    className="ml-3"
+                    onClick={addTodo}
+                  >
+                    <AddIcon />
+                  </Button>
+                </div>
+              )
+              : (<></>)
+            }
+          </CardHeader>
+          
+          <div className="flex flex-col items-center justify-center rounded-lg">
+            {loading 
+              ? <Spinner color="danger"/> 
+              :
+                todoList?.slice().reverse().map(todoCollection => (
+                  <ToDo key={todoCollection.$id} todo={todoCollection} deleteTodo={deleteTodo} updateTodo={updateTodo}/>
+                ))
+            }
+            {!todoListExists && (
+              <div>
+                <h1>No ToDo List Create One Now</h1>
+                <Button color="danger" variant="shadow" onClick={createTodoList}>Create Todo List</Button>
               </div>
-            )
-            : (<></>)
-          }
-        </CardHeader>
-        
-        <div className="flex flex-col items-center justify-center rounded-lg">
-          {loading 
-            ? <Spinner color="danger"/> 
-            :
-              todoList?.slice().reverse().map(todoCollection => (
-                <ToDo key={todoCollection.$id} todo={todoCollection} deleteTodo={deleteTodo} updateTodo={updateTodo}/>
-              ))
-          }
-          {!todoListExists && (
-            <div>
-              <h1>No ToDo List Create One Now</h1>
-              <Button color="danger" variant="shadow" onClick={createTodoList}>Create Todo List</Button>
-            </div>
-          )}
-        </div>
+            )}
+          </div>
+        </ScrollShadow>
       </Card>
     </div>
     </>
