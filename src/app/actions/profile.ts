@@ -37,7 +37,7 @@ export async function updatePassword(newPassword: string, oldPassword: string) {
     const { account } = await createSessionClient()
     // const user = await account.get()
     
-    account.updatePassword(
+    await account.updatePassword(
       newPassword,
       oldPassword
     )
@@ -98,7 +98,7 @@ export async function createNewProfilePhoto(storage: Storage, user: User, file: 
       user.$id, // photo id === user id
       file
     )
-    return {message: "Profile Photo Uploaded Sucessfully.", response: storageResponse, status: 200}
+    return {message: "Profile Photo Uploaded Successfully.", response: storageResponse, status: 200}
   }
   catch (error: any) {
     const errorResponse = JSON.stringify(error)

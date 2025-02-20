@@ -33,7 +33,7 @@ export default function Home() {
         <Divider />
         <CardBody>
           <h2>
-            The goal of this project is to learn to use the Appwwrite Database, Auth, and Storage functionality.
+            The goal of this project is to learn to use the Appwrite Database, Auth, and Storage functionality.
           </h2>
         </CardBody>
         <Divider />
@@ -80,8 +80,8 @@ export default function Home() {
           isFooterBlurred
         >
           <CardHeader className="flex-col !items-start z-10 top-1 absolute">
-            <p className="text-tiny text-white/80 uppercase font-bold">More To Come</p>
-            <h4 className="text-white font-medium text-large">What???</h4>
+            <p className="text-tiny text-white/80 uppercase font-bold">Camera App</p>
+            <h4 className="text-white font-medium text-large">Take and upload photos</h4>
           </CardHeader>
           <Image 
             removeWrapper
@@ -94,12 +94,12 @@ export default function Home() {
 
           <CardFooter className="absolute bottom-0 bg-white/20 text-black border-t-1 border-zinc-100/50">
             <div className="flex flex-row justify-between items-center">
-              <p>Visit Nothing</p>
+              <p>Visit Camera App</p>
               <Button
                 className="ml-3 max-w-[10px]"
                 variant="shadow"
                 color='danger'
-                onClick={() => router.push('/thispagedoesnotexist')}
+                onClick={() => router.push('/camera')}
                 >
                   Visit
               </Button>
