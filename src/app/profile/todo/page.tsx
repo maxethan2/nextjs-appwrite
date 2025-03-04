@@ -25,7 +25,7 @@ export default function ToDoPage() {
     // fetch and set user
     const getLoggedInUser = async () => {
       fetchData: try {
-        // if user data is already fetched dont fetch again
+        // if user data is already fetched don't fetch again
         if (user.$id != "none") {
           // check to see if todo list needs to be fetched
           getTodoList(user)
@@ -94,7 +94,7 @@ export default function ToDoPage() {
 
 
   // take id and collection id from todo component and delete todo from database
-  // after databse call works successfully then delete the todo form the local todo array
+  // after database call works successfully then delete the todo form the local todo array
   const deleteTodo = async (id: string, collectionId: string) => {
     // deleting todo from database
     try {
@@ -107,8 +107,8 @@ export default function ToDoPage() {
 
       // delete todo from local todo[]
       const positionOfDeletedTodo = todoList!.map(e => e.$id).indexOf(id)
+      // if deleted todo is not at the front of the array
       if (positionOfDeletedTodo && positionOfDeletedTodo != 0) {
-        // todoList?.splice(positionOfDeletedTodo, 1)
         setTodoList(prevTodoList => {
           // create copy to splice then return
           const newTodoList = [...prevTodoList!]
@@ -125,7 +125,6 @@ export default function ToDoPage() {
       }
       // deleted todo is the first in the array and the todo length is more than one
       // instead of splicing, shift
-      // This doesnt need to exists ?????????????? 
       else if (positionOfDeletedTodo === 0 && todoList!.length != 1) {
         setTodoList(prevTodoList => {
           const newTodoList = [...prevTodoList!]
@@ -135,6 +134,7 @@ export default function ToDoPage() {
         toast.success("Deleted Todo")
       }
       else {
+        // should never reach
         toast.error("Index Does Not Exist")
       }
     }
@@ -149,7 +149,7 @@ export default function ToDoPage() {
       const response = await axios.post("/api/users/todoList", user)
       const newTodo: Todo = response.data.data
 
-      // add newTodo to local todo to avoid reftching data
+      // add newTodo to local todo array to avoid re-fetching data
       setTodoList(prevTodoList => {
         const newTodoList = [...prevTodoList!]
         newTodoList.push(newTodo)
