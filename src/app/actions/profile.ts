@@ -86,7 +86,7 @@ export async function updateProfilePhoto(form: FormData) {
     // if error is storage_file_not_found meaning that there is no profile photo
     // create new file
     const response = await createNewProfilePhoto(storage, user, file)
-    // return response.message = "Profile Photo Updated Sucessfully"
+    // return response.message = "Profile Photo Updated Successfully"
   }
 }
 

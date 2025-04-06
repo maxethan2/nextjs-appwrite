@@ -19,7 +19,7 @@ export async function GET(request: NextRequest) {
       process.env.NEXT_DATABASE_ID!,
       userID! // userID === collectionID
     )
-    return NextResponse.json({message: 'Successfully Retrived User ToDoList', todoList: todoList})
+    return NextResponse.json({message: 'Successfully Retrieved User ToDoList', todoList: todoList})
   }
   catch (error: any) {
     return NextResponse.json({ message: 'Error Fetching Documents', error: error.message }, 
@@ -102,7 +102,7 @@ export async function DELETE(request: NextRequest) {
   const collectionId = request.nextUrl.searchParams.get('collectionId')
 
   try {
-    // make sure id and collectionid are non null values
+    // make sure id and collection id are non-null values
     // honestly just here to get type script to leave me alone
     if (id === null || collectionId === null) {throw new Error("Id and CollectionId must be non-null")}
 
