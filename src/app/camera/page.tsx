@@ -48,10 +48,10 @@ export default function Camera(){
             canvas.height = video.videoHeight;
             ctx!.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-            const imageDataURL = canvas.toDataURL("image/png");
+            const imageDataURL = canvas.toDataURL("image/jpeg");
 
             const response = await handleASLPredictionImage(imageDataURL)
-            console.log(response.message)
+            console.log(response)
         }
 
     }
