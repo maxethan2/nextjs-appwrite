@@ -1,8 +1,7 @@
 import base64
 import io
 import sys
-from PIL import Image
-
+from PIL import Image, ImageFilter
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -71,7 +70,7 @@ def main():
         transforms.ToTensor(),
         transforms.Normalize((0.5,), (0.5,))
         ])
-    tensor_img = transform(img).unsqueeze(0).to(device)
+    tensor_img = transform(image).unsqueeze(0).to(device)
 
     with torch.no_grad():
         output = CNN(tensor_img)

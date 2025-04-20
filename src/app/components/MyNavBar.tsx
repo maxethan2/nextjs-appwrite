@@ -22,6 +22,7 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
+import CameraAltIcon from '@mui/icons-material/CameraAlt';
 
 export default function MyNavbar() {
   const router = useRouter()
@@ -103,8 +104,8 @@ export default function MyNavbar() {
             <div className="">
               <Image 
                 isBlurred
-                isZoomed
-                width={70}
+                // isZoomed
+                width={50}
                 loading="eager"
                 src='/shyguy.png'
                 alt='Shy Guy Icon'
@@ -174,7 +175,7 @@ export default function MyNavbar() {
                   radius="sm"
                   variant="light"
                 >
-                  TBD
+                  ASL Prediction CNN
                 </Button>
               </DropdownTrigger>
             </NavbarItem>
@@ -187,12 +188,12 @@ export default function MyNavbar() {
               }}
             >
               <DropdownItem
-                key='something1'
-                description="Something will be added here eventually ??omething will be added here eventually ??omething will be added here eventually ??omething will be added here eventually ???"
-                startContent={<QuestionMarkIcon className="text-danger-400" fontSize="large"/>}
-                onClick={() => router.push('/')}
+                key='ASL Prediction CNN'
+                description="Take live photos of ASL symbols that you make with your hand and have a trained CNN predict what symbol you are holding up."
+                startContent={<CameraAltIcon className="text-danger-400" fontSize="large"/>}
+                onClick={() => router.push('/camera')}
               >
-                Something
+                ASL Prediction CNN
               </DropdownItem>
               <DropdownItem
                 key='something2'

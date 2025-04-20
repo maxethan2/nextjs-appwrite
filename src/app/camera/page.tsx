@@ -29,13 +29,13 @@ export default function Camera(){
     }, [])
 
     // UseEffect with setInterval to run every X seconds to take a photo
-    useEffect(() => {
-        const interval = setInterval(predict_ASL, 5000)
-        // clean up code
-        return () => {
-            clearInterval(interval)
-        }
-    }, []);
+    // useEffect(() => {
+    //     const interval = setInterval(predict_ASL, 5000)
+    //     // clean up code
+    //     return () => {
+    //         clearInterval(interval)
+    //     }
+    // }, []);
 
     // get photo from camera and pass to server action
     const predict_ASL = async () => {
@@ -51,6 +51,7 @@ export default function Camera(){
 
             const response = await handleASLPredictionImage(imageDataURL)
             console.log(response)
+            setPredictionText(response.prediction!)
         }
 
     }
@@ -75,11 +76,11 @@ export default function Camera(){
     return (
         <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-tr from-default-50 from-10% to-danger-200 to-65% text-default-800">
             <Card className="">
-                <CardHeader className="">
-                    <p className="m-auto">Camera</p>
+                <CardHeader className="justify-center text-center">
+                    <h1 className="text-4xl">{predictionText}</h1>
                 </CardHeader>
                 <Divider />
-                <CardBody>
+                <CardBody className="flex flex-row">
                     {/* conditionally render video and canvas*/}
                     <video ref={videoRef} autoPlay className='w-full h-full object-cover object-center rounded-lg'>
                     </video>
@@ -87,13 +88,12 @@ export default function Camera(){
                     </canvas>
                 </CardBody>
                 <CardFooter className="">
-                    <h1>{predictionText}</h1>
                     <Button
                         className="ml-3 w-3/5 justify-center m-auto"
                         variant="shadow"
                         color='danger'
-                        onClick={cameraButton}>
-                        {buttonText}
+                        onClick={predict_ASL}>
+                        {"Predict ASL"}
                     </Button>
                 </CardFooter>
             </Card>
