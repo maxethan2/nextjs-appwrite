@@ -38,7 +38,6 @@ export default function Camera(){
     }, []);
 
     // get photo from camera and pass to server action
-    //
     const predict_ASL = async () => {
         const video = videoRef.current;
         const canvas = canvasRef.current;

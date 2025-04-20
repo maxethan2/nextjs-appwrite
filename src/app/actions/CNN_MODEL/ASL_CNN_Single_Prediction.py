@@ -11,10 +11,16 @@ import torchvision
 import torchvision.transforms as transforms
 
 def main():
+    class EdgeDetect:
+        def __call__(self, img):
+            img = img.convert('L')
+            img = img.filter(ImageFilter.FIND_EDGES).point(lambda p: p > 20 and 255)
+            return img
+
     class CNN(nn.Module):
         def __init__(self):
             super().__init__()
-            self.conv1 = nn.Conv2d(in_channels=3, out_channels=32, kernel_size=3, padding=1)
+            self.conv1 = nn.Conv2d(in_channels=1, out_channels=32, kernel_size=3, padding=1)
             self.conv2 = nn.Conv2d(in_channels=32, out_channels=64, kernel_size=3, padding=1)
             self.conv3 = nn.Conv2d(in_channels=64, out_channels=128, kernel_size=3, padding=1)
             self.pool = nn.MaxPool2d(kernel_size=2, stride=2)
@@ -43,7 +49,7 @@ def main():
     image = image.resize((200, 200))
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    model_path = 'C:\\Users\\me03h\\Desktop\\nextjs-appwrite\\src\\app\\actions\\CNN_MODEL\\cnn_model.pth'
+    model_path = 'C:\\Users\\me03h\\Desktop\\nextjs-appwrite\\src\\app\\actions\\CNN_MODEL\\CNN_Model_2.pth'
     model_weights = torch.load(model_path, map_location=device, weights_only=False)
 
     CNN = CNN().to(device)
@@ -56,15 +62,16 @@ def main():
 
     # img is 200x200 jpg
     # then transformed to tensor and normalized
-    # TODO: go to webapp and create function for taking photos every X seconds and sending them to this script (use setInterval and clearInterval with useEffect)
 
     img = mpimg.imread('C:\\Users\\me03h\\Desktop\\nextjs-appwrite\\src\\app\\actions\\CNN_MODEL\\A_test.jpg')
 
-    transform = transforms.Compose(
-        [transforms.ToTensor(),
-         transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
-
-    tensor_img = transform(image).unsqueeze(0).to(device)
+    transform = transforms.Compose([
+        transforms.Resize((200, 200)),
+        EdgeDetect(), # convert images to gray scale and then detect edges
+        transforms.ToTensor(),
+        transforms.Normalize((0.5,), (0.5,))
+        ])
+    tensor_img = transform(img).unsqueeze(0).to(device)
 
     with torch.no_grad():
         output = CNN(tensor_img)
